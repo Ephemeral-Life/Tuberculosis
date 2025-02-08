@@ -1,3 +1,4 @@
+# 修改后的 symformer_retinanet_p2t_fpn_2x_TBX11K.py
 model = dict(
     type='RetinaNet',
     backbone=dict(
@@ -6,8 +7,8 @@ model = dict(
         num_stages=4,
         out_indices=(0, 1, 2, 3),
         style='pytorch',
-        pretrained='../pretrained/p2t_small.pth',
-        init_cfg=dict(type='Pretrained', checkpoint='../pretrained/p2t_small.pth')),
+        pretrained='pretrained/p2t_small.pth',
+        init_cfg=dict(type='Pretrained', checkpoint='pretrained/p2t_small.pth')),
     neck=dict(
         type='FPN',
         in_channels=[64, 128, 320, 512],
@@ -78,7 +79,7 @@ model = dict(
         max_per_img=100))
 
 dataset_type = 'COCODataset'
-data_root = '../data/TBX11K/'
+data_root = 'data/TBX11K/'
 classes = ('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
@@ -113,8 +114,8 @@ data = dict(
     workers_per_gpu=4,
     train=dict(
         type='CocoDataset',
-        ann_file='../data/TBX11K/annotations/json/TBX11K_trainval_only_tb.json',
-        img_prefix='../data/TBX11K/imgs/',
+        ann_file='data/TBX11K/annotations/json/TBX11K_trainval_only_tb.json',
+        img_prefix='data/TBX11K/imgs/',
         pipeline=train_pipeline,
         filter_empty_gt=True,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')),
@@ -122,15 +123,9 @@ data = dict(
 evaluation = dict(interval=2, metric='bbox')
 optimizer = dict(type='AdamW', lr=0.0001, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=None)
-lr_config = dict(
-    policy='step',
-    warmup='linear',
-    warmup_iters=500,
-    warmup_ratio=0.001,
-    step=[16, 22])
-    # step=[8, 11])
-runner = dict(type='EpochBasedRunner', max_epochs=24)
-checkpoint_config = dict(interval=24)
+lr_config = dict(policy='constant')
+runner = dict(type='EpochBasedRunner', max_epochs=1)
+checkpoint_config = dict(interval=1)
 log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]
 dist_params = dict(backend='nccl')
@@ -138,7 +133,5 @@ log_level = 'INFO'
 load_from = None
 resume_from = None
 workflow = [('train', 1)]
-gpu_ids = range(0, 2)
+gpu_ids = range(0, 1)
 find_unused_parameters = True
-seed = 42
-distributed = False

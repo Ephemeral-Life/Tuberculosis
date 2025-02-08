@@ -1,0 +1,8 @@
+python server.py --config configs/symformer/symformer_retinanet_p2t_fpn_2x_TBX11K.py \
+    --save-dir work_dirs/global_model/ --num-rounds 10 --patience 3
+
+
+CUDA_VISIBLE_DEVICES=0 python client.py --cid 0 configs/symformer/symformer_retinanet_p2t_fpn_2x_TBX11K.py
+CUDA_VISIBLE_DEVICES=0 python client.py --cid 1 configs/symformer/symformer_retinanet_p2t_fpn_2x_TBX11K.py
+...
+CUDA_VISIBLE_DEVICES=0 python client.py --cid 29 configs/symformer/symformer_retinanet_p2t_fpn_2x_TBX11K.py
