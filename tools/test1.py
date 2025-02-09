@@ -215,7 +215,7 @@ def main():
             class_preds_tensor = softmax(torch.cat(class_preds).view(-1, 3))
             _, max_idx = class_preds_tensor.max(dim=1)
             # 根据预测类别生成二分类结果：若预测类别为2（非结核病），则标记为 0；否则标记为 1
-            binary_preds = [0 if int(max_idx[i]) == 2 else 1 for i in range(len(max_idx))]
+            binary_preds = [0 if int(max_idx[i]) != 2 else 1 for i in range(len(max_idx))]
             outputs = binary_preds
             if args.txt:
                 os.makedirs(os.path.dirname(args.txt), exist_ok=True)
