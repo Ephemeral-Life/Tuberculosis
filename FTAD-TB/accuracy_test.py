@@ -49,6 +49,7 @@ def main():
     print(f"阳性误判为阴性的数量: {false_negative}")
     print(f"阴性误判率: {false_positive_rate:.2%}")
     print(f"阳性误判率: {false_negative_rate:.2%}")
+    print(f"{1 - false_negative_rate:.2%}")
 
 
 if __name__ == '__main__':

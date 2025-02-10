@@ -7,7 +7,7 @@ model = dict(
         num_stages=4,
         out_indices=(0, 1, 2, 3),
         style='pytorch',
-        pretrained='pretrained/p2t_small.pth',
+        pretrained='../pretrained/p2t_small.pth',
         init_cfg=dict(type='Pretrained', checkpoint='pretrained/p2t_small.pth')),
     neck=dict(
         type='FPN',
@@ -81,7 +81,7 @@ model = dict(
         max_per_img=100))
 
 dataset_type = 'COCODataset'
-data_root = 'data/TBX11K/'
+data_root = '../data/TBX11K/'
 classes = ('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
@@ -116,15 +116,15 @@ data = dict(
     workers_per_gpu=4,
     train=dict(
         type='CocoDataset',
-        ann_file='data/TBX11K/annotations/json/all_trainval.json',
+        ann_file='../data/TBX11K/annotations/json/all_trainval.json',
         img_prefix='data/TBX11K/imgs/',
         pipeline=train_pipeline,
         filter_empty_gt=False,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')),
     test=dict(
         type='CocoDataset',
-        ann_file='data/TBX11K/annotations/json/all_test.json',
-        img_prefix='data/TBX11K/imgs/',
+        ann_file='../data/TBX11K/annotations/json/all_test.json',
+        img_prefix='../data/TBX11K/imgs/',
         pipeline=test_pipeline,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')))
 evaluation = dict(interval=30, metric='bbox')

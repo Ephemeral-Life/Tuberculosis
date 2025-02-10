@@ -108,12 +108,14 @@ def main():
         save_dir=args.save_dir,
         patience=args.patience,
         fraction_fit=1.0,
-        fraction_eval=0.0,
-        min_fit_clients=30,
-        min_available_clients=30,
+        # fraction_eval=0.0,
+        min_fit_clients=5,
+        min_available_clients=5,
+        # min_fit_clients=30,
+        # min_available_clients=30,
     )
     fl.server.start_server(
-        server_address="0.0.0.0:8080",
+        server_address="127.0.0.1:8080",
         config=fl.server.ServerConfig(num_rounds=args.num_rounds),
         strategy=strategy
     )
