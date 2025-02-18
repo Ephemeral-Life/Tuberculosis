@@ -1,0 +1,5329 @@
+{
+    "info": [
+        {
+            "contributor": "Your Name or Contributor Name",
+            "date_created": "2025/01/19",
+            "description": "Tuberculosis Image Dataset",
+            "url": "Your dataset URL",
+            "version": "1.0",
+            "year": 2025
+        }
+    ],
+    "licenses": [
+        {
+            "id": 1,
+            "name": "Attribution-NonCommercial-ShareAlike License",
+            "url": "http://creativecommons.org/licenses/by-nc-sa/2.0/"
+        }
+    ],
+    "categories": [
+        {
+            "id": 1,
+            "name": "Positive",
+            "supercategory": "Tuberculosis"
+        },
+        {
+            "id": 2,
+            "name": "Negative",
+            "supercategory": "Tuberculosis"
+        }
+    ],
+    "images": [
+        {
+            "id": 1,
+            "file_name": "img\\CHNCXR_0001_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 2,
+            "file_name": "img\\CHNCXR_0002_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 3,
+            "file_name": "img\\CHNCXR_0003_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 4,
+            "file_name": "img\\CHNCXR_0004_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 5,
+            "file_name": "img\\CHNCXR_0005_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 6,
+            "file_name": "img\\CHNCXR_0006_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 7,
+            "file_name": "img\\CHNCXR_0007_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 8,
+            "file_name": "img\\CHNCXR_0008_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 9,
+            "file_name": "img\\CHNCXR_0009_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 10,
+            "file_name": "img\\CHNCXR_0010_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 11,
+            "file_name": "img\\CHNCXR_0011_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 12,
+            "file_name": "img\\CHNCXR_0012_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 13,
+            "file_name": "img\\CHNCXR_0013_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 14,
+            "file_name": "img\\CHNCXR_0014_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 15,
+            "file_name": "img\\CHNCXR_0015_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 16,
+            "file_name": "img\\CHNCXR_0016_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 17,
+            "file_name": "img\\CHNCXR_0017_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 18,
+            "file_name": "img\\CHNCXR_0018_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 19,
+            "file_name": "img\\CHNCXR_0019_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 20,
+            "file_name": "img\\CHNCXR_0020_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 21,
+            "file_name": "img\\CHNCXR_0021_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 22,
+            "file_name": "img\\CHNCXR_0022_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 23,
+            "file_name": "img\\CHNCXR_0023_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 24,
+            "file_name": "img\\CHNCXR_0024_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 25,
+            "file_name": "img\\CHNCXR_0025_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 26,
+            "file_name": "img\\CHNCXR_0026_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 27,
+            "file_name": "img\\CHNCXR_0027_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 28,
+            "file_name": "img\\CHNCXR_0028_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 29,
+            "file_name": "img\\CHNCXR_0029_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 30,
+            "file_name": "img\\CHNCXR_0030_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 31,
+            "file_name": "img\\CHNCXR_0031_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 32,
+            "file_name": "img\\CHNCXR_0032_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 33,
+            "file_name": "img\\CHNCXR_0033_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 34,
+            "file_name": "img\\CHNCXR_0034_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 35,
+            "file_name": "img\\CHNCXR_0035_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 36,
+            "file_name": "img\\CHNCXR_0036_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 37,
+            "file_name": "img\\CHNCXR_0037_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 38,
+            "file_name": "img\\CHNCXR_0038_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 39,
+            "file_name": "img\\CHNCXR_0039_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 40,
+            "file_name": "img\\CHNCXR_0040_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 41,
+            "file_name": "img\\CHNCXR_0041_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 42,
+            "file_name": "img\\CHNCXR_0042_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 43,
+            "file_name": "img\\CHNCXR_0043_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 44,
+            "file_name": "img\\CHNCXR_0044_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 45,
+            "file_name": "img\\CHNCXR_0045_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 46,
+            "file_name": "img\\CHNCXR_0046_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 47,
+            "file_name": "img\\CHNCXR_0047_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 48,
+            "file_name": "img\\CHNCXR_0048_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 49,
+            "file_name": "img\\CHNCXR_0049_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 50,
+            "file_name": "img\\CHNCXR_0050_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 51,
+            "file_name": "img\\CHNCXR_0051_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 52,
+            "file_name": "img\\CHNCXR_0052_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 53,
+            "file_name": "img\\CHNCXR_0053_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 54,
+            "file_name": "img\\CHNCXR_0054_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 55,
+            "file_name": "img\\CHNCXR_0055_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 56,
+            "file_name": "img\\CHNCXR_0056_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 57,
+            "file_name": "img\\CHNCXR_0057_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 58,
+            "file_name": "img\\CHNCXR_0058_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 59,
+            "file_name": "img\\CHNCXR_0059_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 60,
+            "file_name": "img\\CHNCXR_0060_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 61,
+            "file_name": "img\\CHNCXR_0061_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 62,
+            "file_name": "img\\CHNCXR_0062_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 63,
+            "file_name": "img\\CHNCXR_0063_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 64,
+            "file_name": "img\\CHNCXR_0064_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 65,
+            "file_name": "img\\CHNCXR_0065_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 66,
+            "file_name": "img\\CHNCXR_0066_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 67,
+            "file_name": "img\\CHNCXR_0067_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 68,
+            "file_name": "img\\CHNCXR_0068_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 69,
+            "file_name": "img\\CHNCXR_0069_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 70,
+            "file_name": "img\\CHNCXR_0070_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 71,
+            "file_name": "img\\CHNCXR_0071_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 72,
+            "file_name": "img\\CHNCXR_0072_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 73,
+            "file_name": "img\\CHNCXR_0073_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 74,
+            "file_name": "img\\CHNCXR_0074_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 75,
+            "file_name": "img\\CHNCXR_0075_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 76,
+            "file_name": "img\\CHNCXR_0076_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 77,
+            "file_name": "img\\CHNCXR_0077_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 78,
+            "file_name": "img\\CHNCXR_0078_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 79,
+            "file_name": "img\\CHNCXR_0079_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 80,
+            "file_name": "img\\CHNCXR_0080_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 81,
+            "file_name": "img\\CHNCXR_0081_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 82,
+            "file_name": "img\\CHNCXR_0082_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 83,
+            "file_name": "img\\CHNCXR_0083_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 84,
+            "file_name": "img\\CHNCXR_0084_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 85,
+            "file_name": "img\\CHNCXR_0085_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 86,
+            "file_name": "img\\CHNCXR_0086_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 87,
+            "file_name": "img\\CHNCXR_0087_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 88,
+            "file_name": "img\\CHNCXR_0088_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 89,
+            "file_name": "img\\CHNCXR_0089_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 90,
+            "file_name": "img\\CHNCXR_0090_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 91,
+            "file_name": "img\\CHNCXR_0091_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 92,
+            "file_name": "img\\CHNCXR_0092_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 93,
+            "file_name": "img\\CHNCXR_0093_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 94,
+            "file_name": "img\\CHNCXR_0094_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 95,
+            "file_name": "img\\CHNCXR_0095_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 96,
+            "file_name": "img\\CHNCXR_0096_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 97,
+            "file_name": "img\\CHNCXR_0097_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 98,
+            "file_name": "img\\CHNCXR_0098_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 99,
+            "file_name": "img\\CHNCXR_0099_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 100,
+            "file_name": "img\\CHNCXR_0100_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 101,
+            "file_name": "img\\CHNCXR_0101_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 102,
+            "file_name": "img\\CHNCXR_0102_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 103,
+            "file_name": "img\\CHNCXR_0103_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 104,
+            "file_name": "img\\CHNCXR_0104_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 105,
+            "file_name": "img\\CHNCXR_0105_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 106,
+            "file_name": "img\\CHNCXR_0106_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 107,
+            "file_name": "img\\CHNCXR_0107_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 108,
+            "file_name": "img\\CHNCXR_0108_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 109,
+            "file_name": "img\\CHNCXR_0109_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 110,
+            "file_name": "img\\CHNCXR_0110_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 111,
+            "file_name": "img\\CHNCXR_0111_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 112,
+            "file_name": "img\\CHNCXR_0112_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 113,
+            "file_name": "img\\CHNCXR_0113_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 114,
+            "file_name": "img\\CHNCXR_0114_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 115,
+            "file_name": "img\\CHNCXR_0115_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 116,
+            "file_name": "img\\CHNCXR_0116_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 117,
+            "file_name": "img\\CHNCXR_0117_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 118,
+            "file_name": "img\\CHNCXR_0118_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 119,
+            "file_name": "img\\CHNCXR_0119_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 120,
+            "file_name": "img\\CHNCXR_0120_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 121,
+            "file_name": "img\\CHNCXR_0121_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 122,
+            "file_name": "img\\CHNCXR_0122_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 123,
+            "file_name": "img\\CHNCXR_0123_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 124,
+            "file_name": "img\\CHNCXR_0124_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 125,
+            "file_name": "img\\CHNCXR_0125_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 126,
+            "file_name": "img\\CHNCXR_0126_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 127,
+            "file_name": "img\\CHNCXR_0127_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 128,
+            "file_name": "img\\CHNCXR_0128_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 129,
+            "file_name": "img\\CHNCXR_0129_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 130,
+            "file_name": "img\\CHNCXR_0130_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 131,
+            "file_name": "img\\CHNCXR_0131_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 132,
+            "file_name": "img\\CHNCXR_0132_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 133,
+            "file_name": "img\\CHNCXR_0133_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 134,
+            "file_name": "img\\CHNCXR_0134_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 135,
+            "file_name": "img\\CHNCXR_0135_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 136,
+            "file_name": "img\\CHNCXR_0136_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 137,
+            "file_name": "img\\CHNCXR_0137_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 138,
+            "file_name": "img\\CHNCXR_0138_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 139,
+            "file_name": "img\\CHNCXR_0139_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 140,
+            "file_name": "img\\CHNCXR_0140_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 141,
+            "file_name": "img\\CHNCXR_0141_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 142,
+            "file_name": "img\\CHNCXR_0142_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 143,
+            "file_name": "img\\CHNCXR_0143_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 144,
+            "file_name": "img\\CHNCXR_0144_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 145,
+            "file_name": "img\\CHNCXR_0145_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 146,
+            "file_name": "img\\CHNCXR_0146_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 147,
+            "file_name": "img\\CHNCXR_0147_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 148,
+            "file_name": "img\\CHNCXR_0148_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 149,
+            "file_name": "img\\CHNCXR_0149_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 150,
+            "file_name": "img\\CHNCXR_0150_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 151,
+            "file_name": "img\\CHNCXR_0151_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 152,
+            "file_name": "img\\CHNCXR_0152_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 153,
+            "file_name": "img\\CHNCXR_0153_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 154,
+            "file_name": "img\\CHNCXR_0154_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 155,
+            "file_name": "img\\CHNCXR_0155_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 156,
+            "file_name": "img\\CHNCXR_0156_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 157,
+            "file_name": "img\\CHNCXR_0157_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 158,
+            "file_name": "img\\CHNCXR_0158_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 159,
+            "file_name": "img\\CHNCXR_0159_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 160,
+            "file_name": "img\\CHNCXR_0160_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 161,
+            "file_name": "img\\CHNCXR_0161_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 162,
+            "file_name": "img\\CHNCXR_0162_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 163,
+            "file_name": "img\\CHNCXR_0163_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 164,
+            "file_name": "img\\CHNCXR_0164_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 165,
+            "file_name": "img\\CHNCXR_0165_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 166,
+            "file_name": "img\\CHNCXR_0166_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 167,
+            "file_name": "img\\CHNCXR_0167_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 168,
+            "file_name": "img\\CHNCXR_0168_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 169,
+            "file_name": "img\\CHNCXR_0169_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 170,
+            "file_name": "img\\CHNCXR_0170_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 171,
+            "file_name": "img\\CHNCXR_0171_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 172,
+            "file_name": "img\\CHNCXR_0172_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 173,
+            "file_name": "img\\CHNCXR_0173_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 174,
+            "file_name": "img\\CHNCXR_0174_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 175,
+            "file_name": "img\\CHNCXR_0175_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 176,
+            "file_name": "img\\CHNCXR_0176_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 177,
+            "file_name": "img\\CHNCXR_0177_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 178,
+            "file_name": "img\\CHNCXR_0178_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 179,
+            "file_name": "img\\CHNCXR_0179_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 180,
+            "file_name": "img\\CHNCXR_0180_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 181,
+            "file_name": "img\\CHNCXR_0181_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 182,
+            "file_name": "img\\CHNCXR_0182_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 183,
+            "file_name": "img\\CHNCXR_0183_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 184,
+            "file_name": "img\\CHNCXR_0184_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 185,
+            "file_name": "img\\CHNCXR_0185_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 186,
+            "file_name": "img\\CHNCXR_0186_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 187,
+            "file_name": "img\\CHNCXR_0187_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 188,
+            "file_name": "img\\CHNCXR_0188_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 189,
+            "file_name": "img\\CHNCXR_0189_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 190,
+            "file_name": "img\\CHNCXR_0190_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 191,
+            "file_name": "img\\CHNCXR_0191_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 192,
+            "file_name": "img\\CHNCXR_0192_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 193,
+            "file_name": "img\\CHNCXR_0193_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 194,
+            "file_name": "img\\CHNCXR_0194_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 195,
+            "file_name": "img\\CHNCXR_0195_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 196,
+            "file_name": "img\\CHNCXR_0196_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 197,
+            "file_name": "img\\CHNCXR_0197_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 198,
+            "file_name": "img\\CHNCXR_0198_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 199,
+            "file_name": "img\\CHNCXR_0199_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 200,
+            "file_name": "img\\CHNCXR_0200_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 201,
+            "file_name": "img\\CHNCXR_0201_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 202,
+            "file_name": "img\\CHNCXR_0202_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 203,
+            "file_name": "img\\CHNCXR_0203_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 204,
+            "file_name": "img\\CHNCXR_0204_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 205,
+            "file_name": "img\\CHNCXR_0205_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 206,
+            "file_name": "img\\CHNCXR_0206_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 207,
+            "file_name": "img\\CHNCXR_0207_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 208,
+            "file_name": "img\\CHNCXR_0208_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 209,
+            "file_name": "img\\CHNCXR_0209_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 210,
+            "file_name": "img\\CHNCXR_0210_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 211,
+            "file_name": "img\\CHNCXR_0211_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 212,
+            "file_name": "img\\CHNCXR_0212_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 213,
+            "file_name": "img\\CHNCXR_0213_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 214,
+            "file_name": "img\\CHNCXR_0214_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 215,
+            "file_name": "img\\CHNCXR_0215_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 216,
+            "file_name": "img\\CHNCXR_0216_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 217,
+            "file_name": "img\\CHNCXR_0217_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 218,
+            "file_name": "img\\CHNCXR_0218_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 219,
+            "file_name": "img\\CHNCXR_0219_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 220,
+            "file_name": "img\\CHNCXR_0220_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 221,
+            "file_name": "img\\CHNCXR_0221_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 222,
+            "file_name": "img\\CHNCXR_0222_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 223,
+            "file_name": "img\\CHNCXR_0223_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 224,
+            "file_name": "img\\CHNCXR_0224_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 225,
+            "file_name": "img\\CHNCXR_0225_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 226,
+            "file_name": "img\\CHNCXR_0226_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 227,
+            "file_name": "img\\CHNCXR_0227_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 228,
+            "file_name": "img\\CHNCXR_0228_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 229,
+            "file_name": "img\\CHNCXR_0229_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 230,
+            "file_name": "img\\CHNCXR_0230_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 231,
+            "file_name": "img\\CHNCXR_0231_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 232,
+            "file_name": "img\\CHNCXR_0232_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 233,
+            "file_name": "img\\CHNCXR_0233_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 234,
+            "file_name": "img\\CHNCXR_0234_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 235,
+            "file_name": "img\\CHNCXR_0235_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 236,
+            "file_name": "img\\CHNCXR_0236_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 237,
+            "file_name": "img\\CHNCXR_0237_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 238,
+            "file_name": "img\\CHNCXR_0238_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 239,
+            "file_name": "img\\CHNCXR_0239_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 240,
+            "file_name": "img\\CHNCXR_0240_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 241,
+            "file_name": "img\\CHNCXR_0241_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 242,
+            "file_name": "img\\CHNCXR_0242_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 243,
+            "file_name": "img\\CHNCXR_0243_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 244,
+            "file_name": "img\\CHNCXR_0244_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 245,
+            "file_name": "img\\CHNCXR_0245_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 246,
+            "file_name": "img\\CHNCXR_0246_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 247,
+            "file_name": "img\\CHNCXR_0247_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 248,
+            "file_name": "img\\CHNCXR_0248_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 249,
+            "file_name": "img\\CHNCXR_0249_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 250,
+            "file_name": "img\\CHNCXR_0250_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 251,
+            "file_name": "img\\CHNCXR_0251_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 252,
+            "file_name": "img\\CHNCXR_0252_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 253,
+            "file_name": "img\\CHNCXR_0253_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 254,
+            "file_name": "img\\CHNCXR_0254_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 255,
+            "file_name": "img\\CHNCXR_0255_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 256,
+            "file_name": "img\\CHNCXR_0256_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 257,
+            "file_name": "img\\CHNCXR_0257_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 258,
+            "file_name": "img\\CHNCXR_0258_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 259,
+            "file_name": "img\\CHNCXR_0259_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 260,
+            "file_name": "img\\CHNCXR_0260_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 261,
+            "file_name": "img\\CHNCXR_0261_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 262,
+            "file_name": "img\\CHNCXR_0262_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 263,
+            "file_name": "img\\CHNCXR_0263_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 264,
+            "file_name": "img\\CHNCXR_0264_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 265,
+            "file_name": "img\\CHNCXR_0265_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 266,
+            "file_name": "img\\CHNCXR_0266_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 267,
+            "file_name": "img\\CHNCXR_0267_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 268,
+            "file_name": "img\\CHNCXR_0268_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 269,
+            "file_name": "img\\CHNCXR_0269_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 270,
+            "file_name": "img\\CHNCXR_0270_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 271,
+            "file_name": "img\\CHNCXR_0271_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 272,
+            "file_name": "img\\CHNCXR_0272_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 273,
+            "file_name": "img\\CHNCXR_0273_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 274,
+            "file_name": "img\\CHNCXR_0274_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 275,
+            "file_name": "img\\CHNCXR_0275_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 276,
+            "file_name": "img\\CHNCXR_0276_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 277,
+            "file_name": "img\\CHNCXR_0277_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 278,
+            "file_name": "img\\CHNCXR_0278_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 279,
+            "file_name": "img\\CHNCXR_0279_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 280,
+            "file_name": "img\\CHNCXR_0280_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 281,
+            "file_name": "img\\CHNCXR_0281_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 282,
+            "file_name": "img\\CHNCXR_0282_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 283,
+            "file_name": "img\\CHNCXR_0283_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 284,
+            "file_name": "img\\CHNCXR_0284_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 285,
+            "file_name": "img\\CHNCXR_0285_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 286,
+            "file_name": "img\\CHNCXR_0286_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 287,
+            "file_name": "img\\CHNCXR_0287_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 288,
+            "file_name": "img\\CHNCXR_0288_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 289,
+            "file_name": "img\\CHNCXR_0289_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 290,
+            "file_name": "img\\CHNCXR_0290_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 291,
+            "file_name": "img\\CHNCXR_0291_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 292,
+            "file_name": "img\\CHNCXR_0292_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 293,
+            "file_name": "img\\CHNCXR_0293_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 294,
+            "file_name": "img\\CHNCXR_0294_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 295,
+            "file_name": "img\\CHNCXR_0295_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 296,
+            "file_name": "img\\CHNCXR_0296_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 297,
+            "file_name": "img\\CHNCXR_0297_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 298,
+            "file_name": "img\\CHNCXR_0298_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 299,
+            "file_name": "img\\CHNCXR_0299_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 300,
+            "file_name": "img\\CHNCXR_0300_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 301,
+            "file_name": "img\\CHNCXR_0301_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 302,
+            "file_name": "img\\CHNCXR_0302_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 303,
+            "file_name": "img\\CHNCXR_0303_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 304,
+            "file_name": "img\\CHNCXR_0304_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 305,
+            "file_name": "img\\CHNCXR_0305_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 306,
+            "file_name": "img\\CHNCXR_0306_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 307,
+            "file_name": "img\\CHNCXR_0307_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 308,
+            "file_name": "img\\CHNCXR_0308_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 309,
+            "file_name": "img\\CHNCXR_0309_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 310,
+            "file_name": "img\\CHNCXR_0310_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 311,
+            "file_name": "img\\CHNCXR_0311_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 312,
+            "file_name": "img\\CHNCXR_0312_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 313,
+            "file_name": "img\\CHNCXR_0313_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 314,
+            "file_name": "img\\CHNCXR_0314_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 315,
+            "file_name": "img\\CHNCXR_0315_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 316,
+            "file_name": "img\\CHNCXR_0316_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 317,
+            "file_name": "img\\CHNCXR_0317_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 318,
+            "file_name": "img\\CHNCXR_0318_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 319,
+            "file_name": "img\\CHNCXR_0319_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 320,
+            "file_name": "img\\CHNCXR_0320_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 321,
+            "file_name": "img\\CHNCXR_0321_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 322,
+            "file_name": "img\\CHNCXR_0322_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 323,
+            "file_name": "img\\CHNCXR_0323_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 324,
+            "file_name": "img\\CHNCXR_0324_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 325,
+            "file_name": "img\\CHNCXR_0325_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 326,
+            "file_name": "img\\CHNCXR_0326_0.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 327,
+            "file_name": "img\\CHNCXR_0327_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 328,
+            "file_name": "img\\CHNCXR_0328_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 329,
+            "file_name": "img\\CHNCXR_0329_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 330,
+            "file_name": "img\\CHNCXR_0330_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 331,
+            "file_name": "img\\CHNCXR_0331_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 332,
+            "file_name": "img\\CHNCXR_0332_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 333,
+            "file_name": "img\\CHNCXR_0333_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 334,
+            "file_name": "img\\CHNCXR_0334_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 335,
+            "file_name": "img\\CHNCXR_0335_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 336,
+            "file_name": "img\\CHNCXR_0336_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 337,
+            "file_name": "img\\CHNCXR_0337_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 338,
+            "file_name": "img\\CHNCXR_0338_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 339,
+            "file_name": "img\\CHNCXR_0339_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 340,
+            "file_name": "img\\CHNCXR_0340_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 341,
+            "file_name": "img\\CHNCXR_0341_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 342,
+            "file_name": "img\\CHNCXR_0342_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 343,
+            "file_name": "img\\CHNCXR_0343_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 344,
+            "file_name": "img\\CHNCXR_0344_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 345,
+            "file_name": "img\\CHNCXR_0345_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 346,
+            "file_name": "img\\CHNCXR_0346_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 347,
+            "file_name": "img\\CHNCXR_0347_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 348,
+            "file_name": "img\\CHNCXR_0348_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 349,
+            "file_name": "img\\CHNCXR_0349_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 350,
+            "file_name": "img\\CHNCXR_0350_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 351,
+            "file_name": "img\\CHNCXR_0351_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 352,
+            "file_name": "img\\CHNCXR_0352_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 353,
+            "file_name": "img\\CHNCXR_0353_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 354,
+            "file_name": "img\\CHNCXR_0354_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 355,
+            "file_name": "img\\CHNCXR_0355_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 356,
+            "file_name": "img\\CHNCXR_0356_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 357,
+            "file_name": "img\\CHNCXR_0357_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 358,
+            "file_name": "img\\CHNCXR_0358_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 359,
+            "file_name": "img\\CHNCXR_0359_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 360,
+            "file_name": "img\\CHNCXR_0360_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 361,
+            "file_name": "img\\CHNCXR_0361_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 362,
+            "file_name": "img\\CHNCXR_0362_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 363,
+            "file_name": "img\\CHNCXR_0363_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 364,
+            "file_name": "img\\CHNCXR_0364_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 365,
+            "file_name": "img\\CHNCXR_0365_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 366,
+            "file_name": "img\\CHNCXR_0366_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 367,
+            "file_name": "img\\CHNCXR_0367_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 368,
+            "file_name": "img\\CHNCXR_0368_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 369,
+            "file_name": "img\\CHNCXR_0369_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 370,
+            "file_name": "img\\CHNCXR_0370_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 371,
+            "file_name": "img\\CHNCXR_0371_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 372,
+            "file_name": "img\\CHNCXR_0372_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 373,
+            "file_name": "img\\CHNCXR_0373_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 374,
+            "file_name": "img\\CHNCXR_0374_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 375,
+            "file_name": "img\\CHNCXR_0375_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 376,
+            "file_name": "img\\CHNCXR_0376_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 377,
+            "file_name": "img\\CHNCXR_0377_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 378,
+            "file_name": "img\\CHNCXR_0378_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 379,
+            "file_name": "img\\CHNCXR_0379_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 380,
+            "file_name": "img\\CHNCXR_0380_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 381,
+            "file_name": "img\\CHNCXR_0381_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 382,
+            "file_name": "img\\CHNCXR_0382_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 383,
+            "file_name": "img\\CHNCXR_0383_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 384,
+            "file_name": "img\\CHNCXR_0384_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 385,
+            "file_name": "img\\CHNCXR_0385_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 386,
+            "file_name": "img\\CHNCXR_0386_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 387,
+            "file_name": "img\\CHNCXR_0387_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 388,
+            "file_name": "img\\CHNCXR_0388_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 389,
+            "file_name": "img\\CHNCXR_0389_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 390,
+            "file_name": "img\\CHNCXR_0390_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 391,
+            "file_name": "img\\CHNCXR_0391_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 392,
+            "file_name": "img\\CHNCXR_0392_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 393,
+            "file_name": "img\\CHNCXR_0393_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 394,
+            "file_name": "img\\CHNCXR_0394_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 395,
+            "file_name": "img\\CHNCXR_0395_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 396,
+            "file_name": "img\\CHNCXR_0396_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 397,
+            "file_name": "img\\CHNCXR_0397_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 398,
+            "file_name": "img\\CHNCXR_0398_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 399,
+            "file_name": "img\\CHNCXR_0399_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 400,
+            "file_name": "img\\CHNCXR_0400_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 401,
+            "file_name": "img\\CHNCXR_0401_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 402,
+            "file_name": "img\\CHNCXR_0402_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 403,
+            "file_name": "img\\CHNCXR_0403_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 404,
+            "file_name": "img\\CHNCXR_0404_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 405,
+            "file_name": "img\\CHNCXR_0405_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 406,
+            "file_name": "img\\CHNCXR_0406_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 407,
+            "file_name": "img\\CHNCXR_0407_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 408,
+            "file_name": "img\\CHNCXR_0408_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 409,
+            "file_name": "img\\CHNCXR_0409_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 410,
+            "file_name": "img\\CHNCXR_0410_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 411,
+            "file_name": "img\\CHNCXR_0411_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 412,
+            "file_name": "img\\CHNCXR_0412_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 413,
+            "file_name": "img\\CHNCXR_0413_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 414,
+            "file_name": "img\\CHNCXR_0414_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 415,
+            "file_name": "img\\CHNCXR_0415_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 416,
+            "file_name": "img\\CHNCXR_0416_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 417,
+            "file_name": "img\\CHNCXR_0417_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 418,
+            "file_name": "img\\CHNCXR_0418_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 419,
+            "file_name": "img\\CHNCXR_0419_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 420,
+            "file_name": "img\\CHNCXR_0420_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 421,
+            "file_name": "img\\CHNCXR_0421_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 422,
+            "file_name": "img\\CHNCXR_0422_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 423,
+            "file_name": "img\\CHNCXR_0423_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 424,
+            "file_name": "img\\CHNCXR_0424_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 425,
+            "file_name": "img\\CHNCXR_0425_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 426,
+            "file_name": "img\\CHNCXR_0426_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 427,
+            "file_name": "img\\CHNCXR_0427_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 428,
+            "file_name": "img\\CHNCXR_0428_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 429,
+            "file_name": "img\\CHNCXR_0429_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 430,
+            "file_name": "img\\CHNCXR_0430_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 431,
+            "file_name": "img\\CHNCXR_0431_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 432,
+            "file_name": "img\\CHNCXR_0432_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 433,
+            "file_name": "img\\CHNCXR_0433_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 434,
+            "file_name": "img\\CHNCXR_0434_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 435,
+            "file_name": "img\\CHNCXR_0435_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 436,
+            "file_name": "img\\CHNCXR_0436_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 437,
+            "file_name": "img\\CHNCXR_0437_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 438,
+            "file_name": "img\\CHNCXR_0438_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 439,
+            "file_name": "img\\CHNCXR_0439_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 440,
+            "file_name": "img\\CHNCXR_0440_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 441,
+            "file_name": "img\\CHNCXR_0441_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 442,
+            "file_name": "img\\CHNCXR_0442_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 443,
+            "file_name": "img\\CHNCXR_0443_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 444,
+            "file_name": "img\\CHNCXR_0444_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 445,
+            "file_name": "img\\CHNCXR_0445_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 446,
+            "file_name": "img\\CHNCXR_0446_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 447,
+            "file_name": "img\\CHNCXR_0447_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 448,
+            "file_name": "img\\CHNCXR_0448_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 449,
+            "file_name": "img\\CHNCXR_0449_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 450,
+            "file_name": "img\\CHNCXR_0450_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 451,
+            "file_name": "img\\CHNCXR_0451_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 452,
+            "file_name": "img\\CHNCXR_0452_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 453,
+            "file_name": "img\\CHNCXR_0453_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 454,
+            "file_name": "img\\CHNCXR_0454_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 455,
+            "file_name": "img\\CHNCXR_0455_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 456,
+            "file_name": "img\\CHNCXR_0456_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 457,
+            "file_name": "img\\CHNCXR_0457_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 458,
+            "file_name": "img\\CHNCXR_0458_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 459,
+            "file_name": "img\\CHNCXR_0459_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 460,
+            "file_name": "img\\CHNCXR_0460_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 461,
+            "file_name": "img\\CHNCXR_0461_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 462,
+            "file_name": "img\\CHNCXR_0462_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 463,
+            "file_name": "img\\CHNCXR_0463_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 464,
+            "file_name": "img\\CHNCXR_0464_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 465,
+            "file_name": "img\\CHNCXR_0465_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 466,
+            "file_name": "img\\CHNCXR_0466_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 467,
+            "file_name": "img\\CHNCXR_0467_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 468,
+            "file_name": "img\\CHNCXR_0468_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 469,
+            "file_name": "img\\CHNCXR_0469_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 470,
+            "file_name": "img\\CHNCXR_0470_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 471,
+            "file_name": "img\\CHNCXR_0471_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 472,
+            "file_name": "img\\CHNCXR_0472_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 473,
+            "file_name": "img\\CHNCXR_0473_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 474,
+            "file_name": "img\\CHNCXR_0474_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 475,
+            "file_name": "img\\CHNCXR_0475_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 476,
+            "file_name": "img\\CHNCXR_0476_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 477,
+            "file_name": "img\\CHNCXR_0477_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 478,
+            "file_name": "img\\CHNCXR_0478_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 479,
+            "file_name": "img\\CHNCXR_0479_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 480,
+            "file_name": "img\\CHNCXR_0480_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 481,
+            "file_name": "img\\CHNCXR_0481_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 482,
+            "file_name": "img\\CHNCXR_0482_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 483,
+            "file_name": "img\\CHNCXR_0483_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 484,
+            "file_name": "img\\CHNCXR_0484_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 485,
+            "file_name": "img\\CHNCXR_0485_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 486,
+            "file_name": "img\\CHNCXR_0486_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 487,
+            "file_name": "img\\CHNCXR_0487_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 488,
+            "file_name": "img\\CHNCXR_0488_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 489,
+            "file_name": "img\\CHNCXR_0489_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 490,
+            "file_name": "img\\CHNCXR_0490_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 491,
+            "file_name": "img\\CHNCXR_0491_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 492,
+            "file_name": "img\\CHNCXR_0492_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 493,
+            "file_name": "img\\CHNCXR_0493_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 494,
+            "file_name": "img\\CHNCXR_0494_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 495,
+            "file_name": "img\\CHNCXR_0495_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 496,
+            "file_name": "img\\CHNCXR_0496_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 497,
+            "file_name": "img\\CHNCXR_0497_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 498,
+            "file_name": "img\\CHNCXR_0498_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 499,
+            "file_name": "img\\CHNCXR_0499_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 500,
+            "file_name": "img\\CHNCXR_0500_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 501,
+            "file_name": "img\\CHNCXR_0501_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 502,
+            "file_name": "img\\CHNCXR_0502_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 503,
+            "file_name": "img\\CHNCXR_0503_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 504,
+            "file_name": "img\\CHNCXR_0504_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 505,
+            "file_name": "img\\CHNCXR_0505_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 506,
+            "file_name": "img\\CHNCXR_0506_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 507,
+            "file_name": "img\\CHNCXR_0507_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 508,
+            "file_name": "img\\CHNCXR_0508_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 509,
+            "file_name": "img\\CHNCXR_0509_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 510,
+            "file_name": "img\\CHNCXR_0510_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 511,
+            "file_name": "img\\CHNCXR_0511_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 512,
+            "file_name": "img\\CHNCXR_0512_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 513,
+            "file_name": "img\\CHNCXR_0513_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 514,
+            "file_name": "img\\CHNCXR_0514_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 515,
+            "file_name": "img\\CHNCXR_0515_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 516,
+            "file_name": "img\\CHNCXR_0516_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 517,
+            "file_name": "img\\CHNCXR_0517_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 518,
+            "file_name": "img\\CHNCXR_0518_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 519,
+            "file_name": "img\\CHNCXR_0519_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 520,
+            "file_name": "img\\CHNCXR_0520_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 521,
+            "file_name": "img\\CHNCXR_0521_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 522,
+            "file_name": "img\\CHNCXR_0522_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 523,
+            "file_name": "img\\CHNCXR_0523_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 524,
+            "file_name": "img\\CHNCXR_0524_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 525,
+            "file_name": "img\\CHNCXR_0525_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 526,
+            "file_name": "img\\CHNCXR_0526_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 527,
+            "file_name": "img\\CHNCXR_0527_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 528,
+            "file_name": "img\\CHNCXR_0528_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 529,
+            "file_name": "img\\CHNCXR_0529_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 530,
+            "file_name": "img\\CHNCXR_0530_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 531,
+            "file_name": "img\\CHNCXR_0531_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 532,
+            "file_name": "img\\CHNCXR_0532_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 533,
+            "file_name": "img\\CHNCXR_0533_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 534,
+            "file_name": "img\\CHNCXR_0534_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 535,
+            "file_name": "img\\CHNCXR_0535_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 536,
+            "file_name": "img\\CHNCXR_0536_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 537,
+            "file_name": "img\\CHNCXR_0537_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 538,
+            "file_name": "img\\CHNCXR_0538_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 539,
+            "file_name": "img\\CHNCXR_0539_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 540,
+            "file_name": "img\\CHNCXR_0540_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 541,
+            "file_name": "img\\CHNCXR_0541_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 542,
+            "file_name": "img\\CHNCXR_0542_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 543,
+            "file_name": "img\\CHNCXR_0543_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 544,
+            "file_name": "img\\CHNCXR_0544_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 545,
+            "file_name": "img\\CHNCXR_0545_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 546,
+            "file_name": "img\\CHNCXR_0546_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 547,
+            "file_name": "img\\CHNCXR_0547_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 548,
+            "file_name": "img\\CHNCXR_0548_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 549,
+            "file_name": "img\\CHNCXR_0549_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 550,
+            "file_name": "img\\CHNCXR_0550_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 551,
+            "file_name": "img\\CHNCXR_0551_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 552,
+            "file_name": "img\\CHNCXR_0552_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 553,
+            "file_name": "img\\CHNCXR_0553_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 554,
+            "file_name": "img\\CHNCXR_0554_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 555,
+            "file_name": "img\\CHNCXR_0555_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 556,
+            "file_name": "img\\CHNCXR_0556_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 557,
+            "file_name": "img\\CHNCXR_0557_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 558,
+            "file_name": "img\\CHNCXR_0558_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 559,
+            "file_name": "img\\CHNCXR_0559_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 560,
+            "file_name": "img\\CHNCXR_0560_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 561,
+            "file_name": "img\\CHNCXR_0561_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 562,
+            "file_name": "img\\CHNCXR_0562_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 563,
+            "file_name": "img\\CHNCXR_0563_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 564,
+            "file_name": "img\\CHNCXR_0564_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 565,
+            "file_name": "img\\CHNCXR_0565_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 566,
+            "file_name": "img\\CHNCXR_0566_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 567,
+            "file_name": "img\\CHNCXR_0567_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 568,
+            "file_name": "img\\CHNCXR_0568_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 569,
+            "file_name": "img\\CHNCXR_0569_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 570,
+            "file_name": "img\\CHNCXR_0570_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 571,
+            "file_name": "img\\CHNCXR_0571_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 572,
+            "file_name": "img\\CHNCXR_0572_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 573,
+            "file_name": "img\\CHNCXR_0573_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 574,
+            "file_name": "img\\CHNCXR_0574_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 575,
+            "file_name": "img\\CHNCXR_0575_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 576,
+            "file_name": "img\\CHNCXR_0576_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 577,
+            "file_name": "img\\CHNCXR_0577_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 578,
+            "file_name": "img\\CHNCXR_0578_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 579,
+            "file_name": "img\\CHNCXR_0579_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 580,
+            "file_name": "img\\CHNCXR_0580_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 581,
+            "file_name": "img\\CHNCXR_0581_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 582,
+            "file_name": "img\\CHNCXR_0582_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 583,
+            "file_name": "img\\CHNCXR_0583_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 584,
+            "file_name": "img\\CHNCXR_0584_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 585,
+            "file_name": "img\\CHNCXR_0585_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 586,
+            "file_name": "img\\CHNCXR_0586_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 587,
+            "file_name": "img\\CHNCXR_0587_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 588,
+            "file_name": "img\\CHNCXR_0588_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 589,
+            "file_name": "img\\CHNCXR_0589_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 590,
+            "file_name": "img\\CHNCXR_0590_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 591,
+            "file_name": "img\\CHNCXR_0591_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 592,
+            "file_name": "img\\CHNCXR_0592_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 593,
+            "file_name": "img\\CHNCXR_0593_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 594,
+            "file_name": "img\\CHNCXR_0594_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 595,
+            "file_name": "img\\CHNCXR_0595_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 596,
+            "file_name": "img\\CHNCXR_0596_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 597,
+            "file_name": "img\\CHNCXR_0597_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 598,
+            "file_name": "img\\CHNCXR_0598_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 599,
+            "file_name": "img\\CHNCXR_0599_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 600,
+            "file_name": "img\\CHNCXR_0600_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 601,
+            "file_name": "img\\CHNCXR_0601_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 602,
+            "file_name": "img\\CHNCXR_0602_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 603,
+            "file_name": "img\\CHNCXR_0603_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 604,
+            "file_name": "img\\CHNCXR_0604_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 605,
+            "file_name": "img\\CHNCXR_0605_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 606,
+            "file_name": "img\\CHNCXR_0606_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 607,
+            "file_name": "img\\CHNCXR_0607_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 608,
+            "file_name": "img\\CHNCXR_0608_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 609,
+            "file_name": "img\\CHNCXR_0609_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 610,
+            "file_name": "img\\CHNCXR_0610_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 611,
+            "file_name": "img\\CHNCXR_0611_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 612,
+            "file_name": "img\\CHNCXR_0612_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 613,
+            "file_name": "img\\CHNCXR_0613_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 614,
+            "file_name": "img\\CHNCXR_0614_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 615,
+            "file_name": "img\\CHNCXR_0615_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 616,
+            "file_name": "img\\CHNCXR_0616_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 617,
+            "file_name": "img\\CHNCXR_0617_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 618,
+            "file_name": "img\\CHNCXR_0618_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 619,
+            "file_name": "img\\CHNCXR_0619_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 620,
+            "file_name": "img\\CHNCXR_0620_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 621,
+            "file_name": "img\\CHNCXR_0621_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 622,
+            "file_name": "img\\CHNCXR_0622_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 623,
+            "file_name": "img\\CHNCXR_0623_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 624,
+            "file_name": "img\\CHNCXR_0624_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 625,
+            "file_name": "img\\CHNCXR_0625_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 626,
+            "file_name": "img\\CHNCXR_0626_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 627,
+            "file_name": "img\\CHNCXR_0627_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 628,
+            "file_name": "img\\CHNCXR_0628_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 629,
+            "file_name": "img\\CHNCXR_0629_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 630,
+            "file_name": "img\\CHNCXR_0630_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 631,
+            "file_name": "img\\CHNCXR_0631_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 632,
+            "file_name": "img\\CHNCXR_0632_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 633,
+            "file_name": "img\\CHNCXR_0633_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 634,
+            "file_name": "img\\CHNCXR_0634_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 635,
+            "file_name": "img\\CHNCXR_0635_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 636,
+            "file_name": "img\\CHNCXR_0636_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 637,
+            "file_name": "img\\CHNCXR_0637_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 638,
+            "file_name": "img\\CHNCXR_0638_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 639,
+            "file_name": "img\\CHNCXR_0639_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 640,
+            "file_name": "img\\CHNCXR_0640_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 641,
+            "file_name": "img\\CHNCXR_0641_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 642,
+            "file_name": "img\\CHNCXR_0642_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 643,
+            "file_name": "img\\CHNCXR_0643_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 644,
+            "file_name": "img\\CHNCXR_0644_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 645,
+            "file_name": "img\\CHNCXR_0645_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 646,
+            "file_name": "img\\CHNCXR_0646_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 647,
+            "file_name": "img\\CHNCXR_0647_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 648,
+            "file_name": "img\\CHNCXR_0648_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 649,
+            "file_name": "img\\CHNCXR_0649_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 650,
+            "file_name": "img\\CHNCXR_0650_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 651,
+            "file_name": "img\\CHNCXR_0651_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 652,
+            "file_name": "img\\CHNCXR_0652_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 653,
+            "file_name": "img\\CHNCXR_0653_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 654,
+            "file_name": "img\\CHNCXR_0654_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 655,
+            "file_name": "img\\CHNCXR_0655_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 656,
+            "file_name": "img\\CHNCXR_0656_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 657,
+            "file_name": "img\\CHNCXR_0657_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 658,
+            "file_name": "img\\CHNCXR_0658_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 659,
+            "file_name": "img\\CHNCXR_0659_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 660,
+            "file_name": "img\\CHNCXR_0660_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 661,
+            "file_name": "img\\CHNCXR_0661_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        },
+        {
+            "id": 662,
+            "file_name": "img\\CHNCXR_0662_1.png",
+            "date_captured": "2025-02-12 08:40:57",
+            "license": 1,
+            "coco_url": "",
+            "flickr_url": ""
+        }
+    ]
+}
