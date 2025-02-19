@@ -75,10 +75,7 @@ model = dict(
         ),
         loss_bbox=dict(type='L1Loss', loss_weight=1.0)
     ),
-    classifier=dict(
-        input_dim=512,
-        num_classes=2  # 确保分类头输出二分类结果，0 表示阴性，1 表示阳性
-    ),
+    classifier=dict(input_dim=512),
     train_cfg=dict(
         assigner=dict(
             type='MaxIoUAssigner',
@@ -104,8 +101,7 @@ model = dict(
 # dataset settings
 dataset_type = 'CocoDataset'
 data_root = 'data/ChinaSet_AllFiles/'
-# 新测试集只区分阴性与阳性，因此 classes 定义为二分类
-classes = ('Negative', 'Positive')
+classes = ('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53],
     std=[58.395, 57.12, 57.375],
@@ -139,51 +135,14 @@ test_pipeline = [
         ]
     )
 ]
-
-# data 配置
 data = dict(
-    samples_per_gpu=1,  # 测试时通常使用单卡，每个 GPU 一张图片
+    samples_per_gpu=8,
     workers_per_gpu=4,
-    # 训练集部分保留，仅供训练时参考
-    train=dict(
-        type=dataset_type,
-        ann_file=data_root + 'annotations/json/all_trainval.json',
-        img_prefix=data_root + 'CXR_png/',
-        pipeline=train_pipeline,
-        filter_empty_gt=False,
-        classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')
-    ),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'dataset.json',  # 新测试集标注文件路径
-        img_prefix=data_root + 'CXR_png',         # 新测试集图像目录
+        ann_file=data_root + 'test_dataset.json',  # 新测试集标注文件路径
+        img_prefix=data_root + 'img',         # 新测试集图像目录
         pipeline=test_pipeline,
         classes=classes  # 使用二分类的类别定义
     )
 )
-
-# evaluation 配置
-# 这里 evaluation 部分主要在训练时使用，测试时若仅关注分类评估，会在 test.py 中调用自定义评估逻辑
-evaluation = dict(interval=1, metric=['bbox'])
-
-# 以下部分为训练时的优化器、学习率调度器等配置，如仅用于测试可忽略
-optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
-optimizer_config = dict(grad_clip=None)
-lr_config = dict(
-    policy='step',
-    warmup='linear',
-    warmup_iters=500,
-    warmup_ratio=0.001,
-    step=[8, 11]
-)
-runner = dict(type='EpochBasedRunner', max_epochs=12)
-checkpoint_config = dict(interval=6)
-log_config = dict(interval=150, hooks=[dict(type='TextLoggerHook')])
-custom_hooks = [dict(type='NumClassCheckHook')]
-dist_params = dict(backend='nccl')
-log_level = 'INFO'
-load_from = 'work_dirs/symformer_retinanet_p2t/latest.pth'
-resume_from = None
-workflow = [('train', 1)]
-gpu_ids = range(0, 2)
-find_unused_parameters = True

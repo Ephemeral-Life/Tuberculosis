@@ -88,18 +88,20 @@ img_norm_cfg = dict(
 train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations', with_bbox=True),
-    dict(type='Resize', img_scale=(512, 512), keep_ratio=True),
+    dict(type='Resize', img_scale=(512, 512), keep_ratio=True),  # 保留原始大尺寸图像
+    # dict(type='Resize', img_scale=(256, 256), keep_ratio=True),  # 新增256x256尺寸图像
     dict(type='RandomFlip', flip_ratio=0.5),
     dict(type='Normalize', **img_norm_cfg),
     dict(type='Pad', size_divisor=32),
     dict(type='DefaultFormatBundle'),
     dict(type='Collect', keys=['img', 'gt_classes', 'gt_bboxes', 'gt_labels'])
 ]
+
 test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(512, 512),
+        img_scale=(512, 512),  # 只使用512x512尺寸图像进行推理
         flip=False,
         transforms=[
             dict(type='Resize', keep_ratio=True),

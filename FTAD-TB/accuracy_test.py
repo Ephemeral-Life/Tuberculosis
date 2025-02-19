@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def main():
-    file_path = "../work_dirs/symformer_retinanet_p2t_cls/result/cls_result.txt"
+    file_path = "../work_dirs/symformer_retinanet_p2t_cls_256/result/cls_result.txt"
     try:
         with open(file_path, "r") as f:
             lines = f.readlines()
@@ -15,7 +15,7 @@ def main():
     wrong = 0
     false_positive = 0  # 误将阴性判断为阳性
     false_negative = 0  # 误将阳性判断为阴性
-    total_negative = 515  # 阴性样本数
+    total_negative = 514  # 阴性样本数
     total_positive = total - total_negative  # 阳性样本数
 
     for idx, line in enumerate(lines):

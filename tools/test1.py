@@ -36,18 +36,19 @@ def parse_args():
         '--fuse-conv-bn',
         action='store_true',
         help='Whether to fuse conv and bn, this will slightly increase'
-             'the inference speed')
+        'the inference speed')
     parser.add_argument(
         '--format-only',
         action='store_true',
         help='Format the output results without perform evaluation. It is'
-             ' useful when you want to format the result to a specific format and '
-             ' submit it to the test server')
+        'useful when you want to format the result to a specific format and '
+        'submit it to the test server')
     parser.add_argument(
         '--eval',
         type=str,
         nargs='+',
-        help='evaluation metrics, e.g., "accuracy", "precision", "recall", "f1_score" for classification')
+        help='evaluation metrics, which depends on the dataset, e.g., "bbox",'
+        ' "segm", "proposal" for COCO, and "mAP", "recall" for PASCAL VOC')
     parser.add_argument('--show', action='store_true', help='show results')
     parser.add_argument(
         '--show-dir', help='directory where painted images will be saved')
@@ -63,30 +64,30 @@ def parse_args():
     parser.add_argument(
         '--tmpdir',
         help='tmp directory used for collecting results from multiple '
-             'workers, available when gpu-collect is not specified')
+        'workers, available when gpu-collect is not specified')
     parser.add_argument(
         '--cfg-options',
         nargs='+',
         action=DictAction,
         help='override some settings in the used config, the key-value pair '
-             'in xxx=yyy format will be merged into config file. If the value to '
-             'be overwritten is a list, it should be like key="[a,b]" or key=a,b '
-             'It also allows nested list/tuple values, e.g. key="[(a,b),(c,d)]" '
-             'Note that the quotation marks are necessary and that no white space '
-             'is allowed.')
+        'in xxx=yyy format will be merged into config file. If the value to '
+        'be overwritten is a list, it should be like key="[a,b]" or key=a,b '
+        'It also allows nested list/tuple values, e.g. key="[(a,b),(c,d)]" '
+        'Note that the quotation marks are necessary and that no white space '
+        'is allowed.')
     parser.add_argument(
         '--options',
         nargs='+',
         action=DictAction,
         help='custom options for evaluation, the key-value pair in xxx=yyy '
-             'format will be kwargs for dataset.evaluate() function (deprecate), '
-             'change to --eval-options instead.')
+        'format will be kwargs for dataset.evaluate() function (deprecate), '
+        'change to --eval-options instead.')
     parser.add_argument(
         '--eval-options',
         nargs='+',
         action=DictAction,
         help='custom options for evaluation, the key-value pair in xxx=yyy '
-             'format will be kwargs for dataset.evaluate() function')
+        'format will be kwargs for dataset.evaluate() function')
     parser.add_argument(
         '--launcher',
         choices=['none', 'pytorch', 'slurm', 'mpi'],
@@ -96,8 +97,8 @@ def parse_args():
     parser.add_argument(
         '--cls-filter',
         type=bool,
-        default=False,
-        help='filter the bbox with cls (default: False). 当只关注图像是否患结核病时，建议开启该参数')
+        default=True,
+        help='filter the bbox with cls(default: True)')
     args = parser.parse_args()
     if 'LOCAL_RANK' not in os.environ:
         os.environ['LOCAL_RANK'] = str(args.local_rank)
@@ -115,9 +116,11 @@ def parse_args():
 def main():
     args = parse_args()
 
-    assert args.out or args.eval or args.format_only or args.show or args.show_dir, (
-        'Please specify at least one operation (save/eval/format/show the results / save the results) '
-        'with the argument "--out", "--eval", "--format-only", "--show" or "--show-dir"')
+    assert args.out or args.eval or args.format_only or args.show \
+        or args.show_dir, \
+        ('Please specify at least one operation (save/eval/format/show the '
+         'results / save the results) with the argument "--out", "--eval"'
+         ', "--format-only", "--show" or "--show-dir"')
 
     if args.eval and args.format_only:
         raise ValueError('--eval and --format_only cannot be both specified')
@@ -128,9 +131,11 @@ def main():
     cfg = Config.fromfile(args.config)
     if args.cfg_options is not None:
         cfg.merge_from_dict(args.cfg_options)
+    # import modules from string list.
     if cfg.get('custom_imports', None):
         from mmcv.utils import import_modules_from_strings
         import_modules_from_strings(**cfg['custom_imports'])
+    # set cudnn_benchmark
     if cfg.get('cudnn_benchmark', False):
         torch.backends.cudnn.benchmark = True
 
@@ -151,15 +156,19 @@ def main():
         cfg.data.test.test_mode = True
         samples_per_gpu = cfg.data.test.pop('samples_per_gpu', 1)
         if samples_per_gpu > 1:
-            cfg.data.test.pipeline = replace_ImageToTensor(cfg.data.test.pipeline)
+            # Replace 'ImageToTensor' to 'DefaultFormatBundle'
+            cfg.data.test.pipeline = replace_ImageToTensor(
+                cfg.data.test.pipeline)
     elif isinstance(cfg.data.test, list):
         for ds_cfg in cfg.data.test:
             ds_cfg.test_mode = True
-        samples_per_gpu = max([ds_cfg.pop('samples_per_gpu', 1) for ds_cfg in cfg.data.test])
+        samples_per_gpu = max(
+            [ds_cfg.pop('samples_per_gpu', 1) for ds_cfg in cfg.data.test])
         if samples_per_gpu > 1:
             for ds_cfg in cfg.data.test:
                 ds_cfg.pipeline = replace_ImageToTensor(ds_cfg.pipeline)
 
+    # init distributed env first, since logger depends on the dist info.
     if args.launcher == 'none':
         distributed = False
     else:
@@ -167,11 +176,13 @@ def main():
         init_dist(args.launcher, **cfg.dist_params)
 
     rank, _ = get_dist_info()
+    # allows not to create
     if args.work_dir is not None and rank == 0:
         mmcv.mkdir_or_exist(osp.abspath(args.work_dir))
         timestamp = time.strftime('%Y%m%d_%H%M%S', time.localtime())
         json_file = osp.join(args.work_dir, f'eval_{timestamp}.json')
 
+    # build the dataloader
     dataset = build_dataset(cfg.data.test)
     data_loader = build_dataloader(
         dataset,
@@ -180,6 +191,7 @@ def main():
         dist=distributed,
         shuffle=False)
 
+    # build the model and load checkpoint
     cfg.model.train_cfg = None
     model = build_detector(cfg.model, test_cfg=cfg.get('test_cfg'))
     fp16_cfg = cfg.get('fp16', None)
@@ -189,81 +201,33 @@ def main():
     if args.fuse_conv_bn:
         model = fuse_conv_bn(model)
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
+    # old versions did not save class info in checkpoints, this walkaround is
+    # for backward compatibility
     if 'CLASSES' in checkpoint.get('meta', {}):
         model.CLASSES = checkpoint['meta']['CLASSES']
     else:
         model.CLASSES = dataset.CLASSES
 
-    # 当只关注图像是否患结核病时，只输出二分类结果，不需要检测框信息
-    if not args.cls_filter:
-        if not distributed:
-            model = MMDataParallel(model, device_ids=[0])
-            outputs = single_gpu_test(model, data_loader, args.show, args.show_dir, args.show_score_thr)
-        else:
-            model = MMDistributedDataParallel(model.cuda(), device_ids=[torch.cuda.current_device()], broadcast_buffers=False)
-            outputs = multi_gpu_test(model, data_loader, args.tmpdir, args.gpu_collect)
-    else:
-        # 目前仅支持单 GPU 模式下的分类结果输出
-        if distributed:
-            raise NotImplementedError("当前仅支持单 GPU 模式下的分类输出，请关闭--cls-filter参数或使用单 GPU模式。")
-        else:
-            model = MMDataParallel(model, device_ids=[0])
-            # 调用单 GPU 模式下的分类测试函数，获得检测结果及分类预测
-            _, class_preds = single_gpu_test_cls(model, data_loader, args.show, args.show_dir, args.show_score_thr)
-            import torch.nn as nn
-            softmax = nn.Softmax(dim=1)
-            class_preds_tensor = softmax(torch.cat(class_preds).view(-1, 3))
-            _, max_idx = class_preds_tensor.max(dim=1)
-            # 根据预测类别生成二分类结果：若预测类别为2（非结核病），则标记为 0；否则标记为 1
-            binary_preds = [0 if int(max_idx[i]) != 2 else 1 for i in range(len(max_idx))]
-            outputs = binary_preds
-            if args.txt:
-                os.makedirs(os.path.dirname(args.txt), exist_ok=True)
-                with open(args.txt, 'w') as f:
-                    for pred in outputs:
-                        f.write(str(pred) + '\n')
+    model = MMDataParallel(model, device_ids=[0])
+    outputs, class_preds = single_gpu_test_cls(model, data_loader, args.show, args.show_dir,
+                                    args.show_score_thr)
+    # use class_preds filter the bbox
+    # TO CHECK
+    import torch.nn as nn
+    softmax = nn.Softmax(dim=1)
+    class_preds = softmax(torch.cat(class_preds).view(-1,3)).cuda()
+    v, max_idx = class_preds.max(dim=1)
+    new_outputs = []
 
-    rank, _ = get_dist_info()
-    if rank == 0:
-        if args.out:
-            print(f'\nwriting results to {args.out}')
-            mmcv.dump(outputs, args.out)
-        kwargs = {} if args.eval_options is None else args.eval_options
-        if args.format_only:
-            dataset.format_results(outputs, **kwargs)
-        if args.eval:
-            # 修改评估部分：如果使用分类结果，则计算二分类指标
-            # 假设每个样本的 ground truth 标签存储在 dataset.data_infos 中的 'gt_label' 字段中
-            if args.cls_filter:
-                if len(outputs) != len(dataset.data_infos):
-                    raise AssertionError(
-                        f'Dataset and results have different sizes: {len(dataset.data_infos)} vs {len(outputs)}')
-                gt_labels = [info['gt_label'] for info in dataset.data_infos]
-                from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
-                accuracy = accuracy_score(gt_labels, outputs)
-                precision = precision_score(gt_labels, outputs, pos_label=1, zero_division=0)
-                recall = recall_score(gt_labels, outputs, pos_label=1, zero_division=0)
-                f1 = f1_score(gt_labels, outputs, pos_label=1, zero_division=0)
-                cm = confusion_matrix(gt_labels, outputs)
-                eval_results = {
-                    'accuracy': accuracy,
-                    'precision': precision,
-                    'recall': recall,
-                    'f1_score': f1,
-                    'confusion_matrix': cm.tolist()
-                }
-                print("Classification evaluation results: ", eval_results)
-                metric = eval_results
-            else:
-                eval_kwargs = cfg.get('evaluation', {}).copy()
-                for key in ['interval', 'tmpdir', 'start', 'gpu_collect', 'save_best', 'rule']:
-                    eval_kwargs.pop(key, None)
-                eval_kwargs.update(dict(metric=args.eval, **kwargs))
-                metric = dataset.evaluate(outputs, **eval_kwargs)
-                print(metric)
-            metric_dict = dict(config=args.config, metric=metric)
-            if args.work_dir is not None and rank == 0:
-                mmcv.dump(metric_dict, json_file)
+    if args.txt:
+        os.makedirs(os.path.dirname(args.txt), exist_ok=True)
+        with open(args.txt, 'a') as file:
+            for idx, output in enumerate(outputs):
+                if max_idx[idx] == 2:
+                    new_outputs.append(output)
+                    file.write('1\n')  # 追加 '1' 一行
+                else:
+                    file.write('0\n')  # 追加 '0' 一行
 
 
 if __name__ == '__main__':

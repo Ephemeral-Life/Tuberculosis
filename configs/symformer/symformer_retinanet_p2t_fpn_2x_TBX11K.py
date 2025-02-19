@@ -136,7 +136,8 @@ custom_hooks = [dict(type='NumClassCheckHook')]
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = None
-resume_from = None
+# resume_from = None
+resume_from = 'work_dirs/symformer_retinanet_p2t/epoch_24.pth'
 workflow = [('train', 1)]
 gpu_ids = range(0, 2)
 find_unused_parameters = True
