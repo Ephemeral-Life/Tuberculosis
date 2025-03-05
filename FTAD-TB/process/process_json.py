@@ -6,7 +6,11 @@ import time
 # 定义文件夹路径和输出文件
 # root = '../../data/Pakistan/'
 # root = '../../data/ChinaSet_AllFiles/'
-root = '../../data/mc+shenzhen/'
+# root = '../../data/mc+shenzhen/'
+# root = '../../data/test/'
+# root = '../../data/lowres_mc+shenzhen/'
+root = '../../data/test2/'
+
 img_folder = root + 'img'  # 图片文件夹路径
 output_json = root + 'test_dataset.json'  # 输出的JSON文件
 
