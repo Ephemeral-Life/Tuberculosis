@@ -129,15 +129,15 @@ lr_config = dict(
     warmup_ratio=0.001,
     step=[16, 22])
     # step=[8, 11])
-runner = dict(type='EpochBasedRunner', max_epochs=48)
+runner = dict(type='EpochBasedRunner', max_epochs=24)
 checkpoint_config = dict(interval=24)
 log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = None
-# resume_from = None
-resume_from = 'work_dirs/symformer_retinanet_p2t/epoch_24.pth'
+resume_from = None
+# resume_from = 'work_dirs/symformer_retinanet_p2t/epoch_24.pth'
 workflow = [('train', 1)]
 gpu_ids = range(0, 2)
 find_unused_parameters = True

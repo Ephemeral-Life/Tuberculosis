@@ -1,4 +1,3 @@
-# 修改后的 symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py
 model = dict(
     type='RetinaNetClsAtt',
     backbone=dict(
@@ -7,7 +6,7 @@ model = dict(
         num_stages=4,
         out_indices=(0, 1, 2, 3),
         style='pytorch',
-        pretrained='../pretrained/p2t_small.pth',
+        pretrained='pretrained/p2t_small.pth',
         init_cfg=dict(type='Pretrained', checkpoint='pretrained/p2t_small.pth')),
     neck=dict(
         type='FPN',
@@ -81,7 +80,7 @@ model = dict(
         max_per_img=100))
 
 dataset_type = 'COCODataset'
-data_root = '../data/TBX11K/'
+data_root = 'data/TBX11K/'
 classes = ('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')
 img_norm_cfg = dict(
     mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
@@ -116,29 +115,36 @@ data = dict(
     workers_per_gpu=4,
     train=dict(
         type='CocoDataset',
-        ann_file='../data/TBX11K/annotations/json/all_trainval.json',
+        ann_file='data/TBX11K/annotations/json/all_trainval2.json',
         img_prefix='data/TBX11K/imgs/',
         pipeline=train_pipeline,
         filter_empty_gt=False,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')),
-    test=dict(
+    val=dict(
         type='CocoDataset',
-        ann_file='../data/TBX11K/annotations/json/all_test.json',
-        img_prefix='../data/TBX11K/imgs/',
+        ann_file='data/g/annotations/test_dataset.json',
+        img_prefix='../../data/TBX11K/imgs/',
         pipeline=test_pipeline,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')))
 evaluation = dict(interval=30, metric='bbox')
 optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
 optimizer_config = dict(grad_clip=None)
-lr_config = dict(policy='constant')
-runner = dict(type='EpochBasedRunner', max_epochs=1)
-checkpoint_config = dict(interval=1)
+lr_config = dict(
+    policy='step',
+    warmup='linear',
+    warmup_iters=500,
+    warmup_ratio=0.001,
+    step=[8, 11])
+runner = dict(type='EpochBasedRunner', max_epochs=12)
+checkpoint_config = dict(interval=6)
 log_config = dict(interval=150, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
 load_from = 'work_dirs/symformer_retinanet_p2t/latest.pth'
 resume_from = None
+# load_from = None
+# resume_from = 'work_dirs/symformer_retinanet_p2t_cls/epoch_12.pth'
 workflow = [('train', 1)]
-gpu_ids = range(0, 1)
+gpu_ids = range(0, 2)
 find_unused_parameters = True

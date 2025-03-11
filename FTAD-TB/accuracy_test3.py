@@ -69,8 +69,8 @@ def print_results(correct_normal, correct_other, false_normal_to_other, false_ot
 # 修改后的主函数
 def main():
     # 路径设置
-    data_folder = "../data/test2/annotations"  # 实际标签的文件夹路径
-    prediction_file = "../work_dirs/symformer_retinanet_p2t_cls_256/result/cls_result.txt"  # 模型预测结果文件路径
+    data_folder = "../data/mc+shenzhen/annotations"  # 实际标签的文件夹路径
+    prediction_file = "../work_dirs/symformer_retinanet_p2t_cls/result/cls_result.txt"  # 模型预测结果文件路径
 
     # 读取数据
     actual_labels = read_actual_labels(data_folder)

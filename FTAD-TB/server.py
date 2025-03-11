@@ -1,140 +1,261 @@
+import os
 import argparse
-import flwr as fl
-from flwr.server.strategy import FedAvg
-from typing import List, Tuple, Dict, Optional
 import numpy as np
 import torch
+from collections import OrderedDict
+import time
+from typing import Dict, List, Tuple, Optional, Union
+import logging
+
+# Import Flower
+import flwr as fl
+from flwr.common import Parameters, FitRes, EvaluateRes, NDArrays, Scalar
+from flwr.server.client_proxy import ClientProxy
+from flwr.server.strategy import FedAvg
+
+# Import your existing training and evaluation code
 from mmcv import Config
 from mmdet.models import build_detector
 from mmdet.datasets import build_dataset
+from mmdet.apis import single_gpu_test
+from mmcv.parallel import MMDataParallel
+from mmcv.runner import load_checkpoint
+from mmdet.core import eval_map
 
-class EvaluateAndSaveModelStrategy(FedAvg):
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger("Server")
+
+
+class MMDetectionServer(FedAvg):
+    """Flower server strategy that extends FedAvg with MMDetection validation."""
+
     def __init__(
-        self,
-        model,
-        num_rounds: int,
-        save_path: str = "global_model.pt",
-        val_dataset=None,
-        patience: int = 5,
-        *args,
-        **kwargs
+            self,
+            config_path: str,
+            server_model_save_path: str = './server_models',
+            fraction_fit: float = 1.0,
+            fraction_evaluate: float = 1.0,
+            min_fit_clients: int = 2,
+            min_evaluate_clients: int = 2,
+            min_available_clients: int = 2,
+            evaluate_fn=None,
+            *args,
+            **kwargs
     ):
-        super().__init__(*args, **kwargs)
-        self.model = model                  # 服务器端模型实例
-        self.num_rounds = num_rounds        # 总轮数
-        self.save_path = save_path          # 模型保存路径
-        self.val_dataset = val_dataset      # 验证数据集
-        self.patience = patience            # 早停耐心值
-        self.best_metric = float('-inf')    # 最佳验证指标（越大越好，例如 mAP）
-        self.rounds_without_improvement = 0 # 无提升轮数计数器
+        super().__init__(
+            fraction_fit=fraction_fit,
+            fraction_evaluate=fraction_evaluate,
+            min_fit_clients=min_fit_clients,
+            min_evaluate_clients=min_evaluate_clients,
+            min_available_clients=min_available_clients,
+            evaluate_fn=evaluate_fn,
+            *args,
+            **kwargs
+        )
+        self.config_path = config_path
+        self.server_model_save_path = server_model_save_path
+        os.makedirs(server_model_save_path, exist_ok=True)
+
+        # Load config
+        self.cfg = Config.fromfile(config_path)
+
+        # Build model
+        self.model = build_detector(
+            self.cfg.model,
+            train_cfg=self.cfg.get('train_cfg'),
+            test_cfg=self.cfg.get('test_cfg'))
+        self.model.init_weights()
+
+        # Build validation dataset
+        self.val_dataset = build_dataset(self.cfg.data.val)
+        self.model.CLASSES = self.val_dataset.CLASSES
+
+        # Initialize parameters
+        self.parameters = self.get_model_parameters()
+
+        logger.info(f"Server initialized with config: {config_path}")
+        logger.info(f"Model type: {self.cfg.model.type}")
+        logger.info(f"Validation dataset size: {len(self.val_dataset)}")
+
+    def get_model_parameters(self) -> List[np.ndarray]:
+        """Get model parameters as a list of NumPy arrays."""
+        state_dict = self.model.state_dict()
+        return [val.cpu().numpy() for _, val in state_dict.items()]
+
+    def set_model_parameters(self, parameters: List[np.ndarray]) -> None:
+        """Set model parameters from a list of NumPy arrays."""
+        state_dict = OrderedDict()
+        params_dict = zip(self.model.state_dict().keys(), parameters)
+        for k, v in params_dict:
+            state_dict[k] = torch.Tensor(v)
+        self.model.load_state_dict(state_dict, strict=True)
+
+    def configure_fit(
+            self, server_round: int, parameters: Parameters, client_manager
+    ):
+        """Configure the next round of training."""
+        # Save current global model
+        self.parameters = parameters
+        self.save_model(server_round)
+
+        # Get clients for this round
+        config = {}
+        if server_round > 1:
+            # Tell clients to load from the saved global model
+            config["server_model_path"] = os.path.join(
+                self.server_model_save_path, f"round-{server_round - 1}-model.pth"
+            )
+
+        client_instructions = super().configure_fit(server_round, parameters, client_manager)
+
+        # Add the same config to all clients
+        for _, fit_ins in client_instructions:
+            fit_ins.config.update(config)
+
+        return client_instructions
 
     def aggregate_fit(
-        self,
-        server_round: int,
-        results: List[Tuple[fl.common.Parameters, int]],
-        failures: List[BaseException],
-    ) -> Tuple[fl.common.Parameters, Dict]:
-        """聚合客户端的训练结果并更新全局模型"""
-        aggregated_parameters, aggregated_metrics = super().aggregate_fit(server_round, results, failures)
+            self,
+            server_round: int,
+            results: List[Tuple[ClientProxy, FitRes]],
+            failures: List[Union[Tuple[ClientProxy, FitRes], BaseException]],
+    ) -> Tuple[Optional[Parameters], Dict[str, Scalar]]:
+        """Aggregate model weights and store checkpoint."""
+        # Call aggregate_fit from parent class (FedAvg)
+        aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
+
         if aggregated_parameters is not None:
-            # 将聚合参数加载到模型
-            parameters_tensors = [torch.from_numpy(np_array) for np_array in aggregated_parameters]
-            state_dict = self.model.state_dict()
-            param_keys = list(state_dict.keys())
-            for key, param in zip(param_keys, parameters_tensors):
-                if state_dict[key].shape == param.shape:
-                    state_dict[key] = param
-                else:
-                    print(f"Warning: Shape mismatch for {key}, skipping...")
-            self.model.load_state_dict(state_dict)
-        return aggregated_parameters, aggregated_metrics
+            # Update server model with aggregated parameters
+            self.parameters = aggregated_parameters
+            self.set_model_parameters(aggregated_parameters)
 
-    def aggregate_evaluate(
-        self,
-        server_round: int,
-        results: List[Tuple[float, int]],
-        failures: List[BaseException],
-    ) -> Tuple[Optional[float], Dict[str, float]]:
-        """聚合客户端的评估结果，执行早停逻辑"""
-        if not results:
-            return None, {}
+            # Save the model
+            self.save_model(server_round)
 
-        # 聚合评估指标（这里假设客户端返回的是损失，实际应改为 mAP 等指标）
-        total_loss = sum([loss for loss, _ in results])
-        total_samples = sum([num_samples for _, num_samples in results])
-        avg_loss = total_loss / total_samples
-        metrics = {"avg_loss": avg_loss}
+            # Evaluate the model on the validation set
+            eval_results = self.evaluate_model()
+            logger.info(f"Server-side evaluation after round {server_round}: {eval_results}")
 
-        # 假设验证指标是 mAP（越大越好），这里用 -avg_loss 模拟（越小越好需调整逻辑）
-        current_metric = -avg_loss  # 实际应用中应替换为 mAP
+            # Add evaluation metrics to the metrics dictionary
+            metrics.update(eval_results)
 
-        # 早停逻辑
-        if current_metric > self.best_metric:
-            self.best_metric = current_metric
-            self.rounds_without_improvement = 0
-            # 保存最优模型
-            torch.save(self.model.state_dict(), self.save_path)
-            print(f"Round {server_round}: New best model saved with metric: {current_metric}")
+        return aggregated_parameters, metrics
+
+    def save_model(self, server_round: int) -> None:
+        """Save the current model."""
+        save_path = os.path.join(self.server_model_save_path, f"round-{server_round}-model.pth")
+        torch.save(self.model.state_dict(), save_path)
+        logger.info(f"Saved model to {save_path}")
+
+    def load_model(self, path: str) -> None:
+        """Load model from a checkpoint."""
+        if os.path.exists(path):
+            checkpoint = torch.load(path, map_location="cpu")
+            self.model.load_state_dict(checkpoint)
+            logger.info(f"Loaded model from {path}")
+            self.parameters = self.get_model_parameters()
         else:
-            self.rounds_without_improvement += 1
-            print(f"Round {server_round}: No improvement, rounds without improvement: {self.rounds_without_improvement}")
-            if self.rounds_without_improvement >= self.patience:
-                print(f"Early stopping triggered at round {server_round}")
-                # 停止服务器（Flower暂无直接API，可通过退出进程模拟）
-                raise SystemExit("Early stopping triggered")
+            logger.warning(f"Model checkpoint not found at {path}")
 
-        return avg_loss, metrics
+    def evaluate_model(self) -> Dict[str, float]:
+        """Evaluate the current model on the validation dataset."""
+        # Create dataloader for validation dataset
+        from torch.utils.data import DataLoader
+        from mmdet.datasets.pipelines import Compose
 
-def parse_args():
-    parser = argparse.ArgumentParser(description='Flower Server for Federated Learning with MMDetection')
-    parser.add_argument('--config', type=str, required=True, help='Path to the MMDetection configuration file')
-    parser.add_argument('--num-rounds', type=int, default=5, help='Number of federated learning rounds')
-    parser.add_argument('--save-path', type=str, default='global_model.pt', help='Path to save the global model')
-    parser.add_argument('--val-dir', type=str, required=True, help='Path to the validation directory (g_val)')
-    parser.add_argument('--patience', type=int, default=5, help='Patience for early stopping')
-    return parser.parse_args()
+        # Preparing the data loader
+        data_loader = DataLoader(
+            self.val_dataset,
+            batch_size=1,
+            sampler=None,
+            num_workers=1,
+            shuffle=False
+        )
+
+        # Prepare model for testing
+        self.model = MMDataParallel(self.model, device_ids=[0])
+        self.model.eval()
+
+        # Run evaluation
+        results = []
+        logger.info("Starting server-side evaluation on validation dataset")
+
+        with torch.no_grad():
+            for data in data_loader:
+                result = self.model(return_loss=False, rescale=True, **data)
+                results.append(result)
+
+        # Calculate mAP
+        try:
+            # Get annotations from dataset
+            annotations = [self.val_dataset.get_ann_info(i) for i in range(len(self.val_dataset))]
+
+            # Calculate mAP
+            eval_results = eval_map(
+                results,
+                annotations,
+                scale_ranges=None,
+                iou_thr=0.5,
+                dataset=self.val_dataset.CLASSES,
+                logger='silent'
+            )
+
+            # Extract and format results
+            mean_ap = eval_results['AP'].mean().item()
+            class_aps = {
+                f"AP_{class_name}": ap.item()
+                for class_name, ap in zip(self.val_dataset.CLASSES, eval_results['AP'])
+            }
+
+            metrics = {
+                "mean_ap": mean_ap,
+                **class_aps
+            }
+
+            logger.info(f"Evaluation metrics: {metrics}")
+            return metrics
+
+        except Exception as e:
+            logger.error(f"Error during evaluation: {e}")
+            return {"evaluation_error": 1.0}
+
 
 def main():
-    args = parse_args()
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Flower Server with MMDetection')
+    parser.add_argument('--config', required=True, help='MMDetection config file path')
+    parser.add_argument('--server-address', type=str, default="0.0.0.0:8080", help='Server address (IP:PORT)')
+    parser.add_argument('--rounds', type=int, default=3, help='Number of rounds')
+    parser.add_argument('--min-clients', type=int, default=2, help='Minimum number of clients')
+    parser.add_argument('--save-dir', type=str, default='./server_models', help='Directory to save models')
+    parser.add_argument('--resume-from', type=str, default=None, help='Path to model checkpoint to resume from')
+    args = parser.parse_args()
 
-    # 加载配置文件
-    cfg = Config.fromfile(args.config)
-
-    # 更新验证集配置
-    cfg.data.val.ann_file = f"{args.val_dir}/annotations.json"  # JSON标注文件路径
-    cfg.data.val.img_prefix = f"{args.val_dir}/imgs"            # 图像文件夹路径
-
-    # 构建模型
-    model = build_detector(
-        cfg.model,
-        train_cfg=cfg.get('train_cfg'),
-        test_cfg=cfg.get('test_cfg')
-    )
-    model.init_weights()
-
-    # 构建验证数据集
-    val_dataset = build_dataset(cfg.data.val)
-
-    # 定义联邦学习策略
-    strategy = EvaluateAndSaveModelStrategy(
-        model=model,
-        num_rounds=args.num_rounds,
-        save_path=args.save_path,
-        val_dataset=val_dataset,
-        patience=args.patience,
-        fraction_fit=1.0,           # 每轮训练时选择所有客户端
-        fraction_evaluate=0.5,      # 每轮评估50%的客户端
-        min_fit_clients=2,          # 每轮训练所需的最小客户端数
-        min_evaluate_clients=1,     # 每轮评估所需的最小客户端数
-        min_available_clients=2,    # 服务器启动前所需的最小可用客户端数
+    # Start Flower server
+    strategy = MMDetectionServer(
+        config_path=args.config,
+        server_model_save_path=args.save_dir,
+        min_fit_clients=args.min_clients,
+        min_evaluate_clients=args.min_clients,
+        min_available_clients=args.min_clients,
     )
 
-    # 启动Flower服务器
+    # If resume from checkpoint is specified
+    if args.resume_from:
+        strategy.load_model(args.resume_from)
+        logger.info(f"Resumed from {args.resume_from}")
+
+    # Start server
     fl.server.start_server(
-        server_address="0.0.0.0:8080",
-        config=fl.server.ServerConfig(num_rounds=args.num_rounds),
+        server_address=args.server_address,
+        config=fl.server.ServerConfig(num_rounds=args.rounds),
         strategy=strategy,
     )
+
 
 if __name__ == "__main__":
     main()
