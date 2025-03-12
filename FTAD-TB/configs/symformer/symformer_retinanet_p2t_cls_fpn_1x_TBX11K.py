@@ -1,3 +1,5 @@
+seed = 42
+work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower'
 model = dict(
     type='RetinaNetClsAtt',
     backbone=dict(
@@ -123,7 +125,7 @@ data = dict(
     val=dict(
         type='CocoDataset',
         ann_file='data/g/annotations/test_dataset.json',
-        img_prefix='../../data/TBX11K/imgs/',
+        img_prefix='data/TBX11K/imgs/',
         pipeline=test_pipeline,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')))
 evaluation = dict(interval=30, metric='bbox')
@@ -148,3 +150,4 @@ resume_from = None
 workflow = [('train', 1)]
 gpu_ids = range(0, 2)
 find_unused_parameters = True
+

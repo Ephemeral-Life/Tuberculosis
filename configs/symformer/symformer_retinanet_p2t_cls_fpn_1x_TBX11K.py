@@ -123,7 +123,7 @@ data = dict(
     test=dict(
         type='CocoDataset',
         ann_file='data/TBX11K/annotations/json/all_test.json',
-        img_prefix='../../data/TBX11K/imgs/',
+        img_prefix='data/TBX11K/imgs/',
         pipeline=test_pipeline,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')))
 evaluation = dict(interval=30, metric='bbox')
