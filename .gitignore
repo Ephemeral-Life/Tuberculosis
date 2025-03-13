@@ -125,3 +125,4 @@ work_dirs/
 .github/
 data
 pretrained
+/temp_client_ann

@@ -5,7 +5,7 @@ import time
 import torch
 import numpy as np
 from collections import OrderedDict
-from typing import List, Tuple
+from typing import List, Tuple, Optional, Dict
 from mmcv import Config
 from mmcv.utils import Registry, build_from_cfg
 from mmdet.datasets import CocoDataset
@@ -14,13 +14,13 @@ from mmdet.apis import train_detector, set_random_seed
 from pycocotools.coco import COCO
 import flwr
 from flwr.client import Client, ClientApp, NumPyClient
-from flwr.common import Metrics, Context
+from flwr.common import Metrics, Context, Parameters, Scalar
 from flwr.server import ServerApp, ServerConfig, ServerAppComponents
 from flwr.server.strategy import FedAvg
 from flwr.simulation import run_simulation
 
 # 加载配置文件
-cfg = Config.fromfile('FTAD-TB\configs\symformer\symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
+cfg = Config.fromfile('FTAD-TB\\configs\\symformer\\symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
 
 # 注册 DATASETS 和 PIPELINES
 DATASETS = Registry('dataset')
@@ -41,6 +41,9 @@ num_clients = 5
 partition_size = len(image_ids) // num_clients
 partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
 
+# 创建临时目录存储客户端标注文件
+temp_dir = 'temp_client_ann'
+os.makedirs(temp_dir, exist_ok=True)
 
 # 定义一个函数，为每个客户端生成临时的标注文件
 def create_client_ann_file(partition_id: int, client_image_ids: List[int]) -> str:
@@ -64,16 +67,15 @@ def create_client_ann_file(partition_id: int, client_image_ids: List[int]) -> st
         'info': coco.dataset.get('info', {}),
         'licenses': coco.dataset.get('licenses', [])
     }
-    temp_ann_file = f'temp_client_{partition_id}_ann.json'
+    temp_ann_file = os.path.join(temp_dir, f'client_{partition_id}_ann.json')
     with open(temp_ann_file, 'w') as f:
         json.dump(client_coco, f)
     return temp_ann_file
 
-
-# 定义Flower客户端类
+# 定义 Flower 客户端类
 class FlowerClient(NumPyClient):
     def __init__(self, partition_id: int):
-        """初始化Flower客户端。
+        """初始化 Flower 客户端。
 
         Args:
             partition_id (int): 客户端的分区编号 (0-9)。
@@ -112,7 +114,7 @@ class FlowerClient(NumPyClient):
         """获取模型的当前参数。
 
         Returns:
-            List[np.ndarray]: 模型参数的NumPy数组列表。
+            List[np.ndarray]: 模型参数的 NumPy 数组列表。
         """
         return [val.cpu().numpy() for _, val in self.net.state_dict().items()]
 
@@ -137,10 +139,13 @@ class FlowerClient(NumPyClient):
             Tuple: 更新后的参数、样本数和附加信息。
         """
         self.set_parameters(parameters)
-        # 设置随机种子，如果 cfg 中没有 seed，则使用默认值 0
-        seed = cfg.get('seed', 42)  # Safely get 'seed' with default value 0
+        # 设置随机种子
+        seed = cfg.get('seed', 42)
         set_random_seed(seed)
-        # 训练模型
+        # 指定设备为单 GPU 或 CPU
+        device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.net = self.net.to(device)
+        # 训练模型（移除 device 参数）
         train_detector(
             self.net,
             [self.trainloader],
@@ -148,7 +153,7 @@ class FlowerClient(NumPyClient):
             distributed=False,
             validate=False,  # 在客户端不进行验证
             timestamp=time.strftime('%Y%m%d_%H%M%S', time.localtime()),
-            meta={'seed': seed}  # Use the retrieved seed value
+            meta={'seed': seed}
         )
         return self.get_parameters(config), len(self.trainloader), {}
 
@@ -163,29 +168,24 @@ class FlowerClient(NumPyClient):
             Tuple: 损失、样本数和评估指标。
         """
         self.set_parameters(parameters)
-        # 注意：此处为占位符，您需要根据项目添加实际评估逻辑
-        # 例如：loss, metrics = evaluate(self.net, self.valloader)
-        # 当前返回默认值
+        # 注意：此处为占位符，您可根据需要添加实际评估逻辑
         return 0.0, len(self.trainloader), {"accuracy": 0.0}
-
 
 # 定义 client_fn
 def client_fn(context: Context) -> Client:
-    """创建Flower客户端实例。
+    """创建 Flower 客户端实例。
 
     Args:
-        context (Context): Flower上下文，包含节点配置。
+        context (Context): Flower 上下文，包含节点配置。
 
     Returns:
-        Client: Flower客户端实例。
+        Client: Flower 客户端实例。
     """
     partition_id = context.node_config["partition-id"]
     return FlowerClient(partition_id).to_client()
 
-
 # 创建 ClientApp
 client = ClientApp(client_fn=client_fn)
-
 
 # 定义 weighted_average 函数
 def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
@@ -201,28 +201,66 @@ def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     examples = [num_examples for num_examples, _ in metrics]
     return {"accuracy": sum(accuracies) / sum(examples) if sum(examples) > 0 else 0.0}
 
+# 自定义 FedAvg 策略以保存聚合模型
+class CustomFedAvg(FedAvg):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 创建一个模型实例用于保存聚合参数
+        self.model = build_detector(
+            cfg.model,
+            train_cfg=cfg.get('train_cfg'),
+            test_cfg=cfg.get('test_cfg')
+        )
+
+    def aggregate_fit(
+        self,
+        server_round: int,
+        results: List[Tuple[flwr.server.client_proxy.ClientProxy, flwr.common.FitRes]],
+        failures: List[BaseException],
+    ) -> Tuple[Optional[Parameters], Dict[str, Scalar]]:
+        """聚合客户端模型并保存聚合后的模型。
+
+        Args:
+            server_round (int): 当前轮次。
+            results: 客户端训练结果。
+            failures: 失败的客户端。
+
+        Returns:
+            Tuple: 聚合后的参数和指标。
+        """
+        aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
+        if aggregated_parameters is not None:
+            # 将聚合参数转换为 PyTorch 状态字典
+            params_dict = zip(self.model.state_dict().keys(), [torch.tensor(p) for p in aggregated_parameters.tensors])
+            state_dict = OrderedDict({k: v for k, v in params_dict})
+            # 更新模型的 state_dict
+            self.model.load_state_dict(state_dict, strict=True)
+            # 保存模型
+            model_path = f"aggregated_model_round_{server_round}.pth"
+            torch.save(self.model.state_dict(), model_path)
+            print(f"Saved aggregated model to {model_path}")
+        return aggregated_parameters, metrics
 
 # 定义 server_fn
 def server_fn(context: Context) -> ServerAppComponents:
     """定义服务器配置。
 
     Args:
-        context (Context): Flower上下文。
+        context (Context): Flower 上下文。
 
     Returns:
         ServerAppComponents: 服务器配置组件。
     """
-    strategy = FedAvg(
-        fraction_fit=1.0,  # 训练时采样100%的客户端
-        fraction_evaluate=0.5,  # 评估时采样50%的客户端
+    strategy = CustomFedAvg(
+        fraction_fit=1.0,  # 训练时采样 100% 的客户端
+        fraction_evaluate=0.5,  # 评估时采样 50% 的客户端
         min_fit_clients=5,  # 最少训练客户端数
         min_evaluate_clients=5,  # 最少评估客户端数
-        min_available_clients=5,  # 等待所有5个客户端可用
+        min_available_clients=5,  # 等待所有 5 个客户端可用
         evaluate_metrics_aggregation_fn=weighted_average,
     )
-    config = ServerConfig(num_rounds=5)  # 运行5轮联邦学习
+    config = ServerConfig(num_rounds=5)  # 运行 5 轮联邦学习
     return ServerAppComponents(strategy=strategy, config=config)
-
 
 # 创建 ServerApp
 server = ServerApp(server_fn=server_fn)
