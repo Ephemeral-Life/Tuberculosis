@@ -28,6 +28,12 @@ cfg.runner = dict(type='EpochBasedRunner', max_epochs=1)
 # 设置 GPU ID（与原项目一致）
 cfg.gpu_ids = [0]
 
+# 减小批次大小以节省内存
+cfg.data.samples_per_gpu = 2  # 从默认值（可能是 8）减小到 2
+
+# 启用梯度累积以模拟大批量训练
+cfg.optimizer_config = dict(grad_clip=None, accumulate_grad_batches=4)  # 累积 4 个批次的梯度
+
 # 注册 DATASETS 和 PIPELINES
 DATASETS = Registry('dataset')
 PIPELINES = Registry('pipeline')
