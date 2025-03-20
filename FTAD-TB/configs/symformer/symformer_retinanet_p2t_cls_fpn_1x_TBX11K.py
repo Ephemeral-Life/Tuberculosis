@@ -1,5 +1,9 @@
 seed = 42
 work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower'
+num_clients = 3
+num_rounds = 3
+max_epochs = 6
+log_level = 'WARNING'
 model = dict(
     type='RetinaNetClsAtt',
     backbone=dict(
@@ -137,7 +141,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=0.001,
     step=[8, 11])
-runner = dict(type='EpochBasedRunner', max_epochs=12)
+runner = dict(type='EpochBasedRunner', max_epochs=max_epochs)
 checkpoint_config = dict(interval=6)
 log_config = dict(interval=150, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]

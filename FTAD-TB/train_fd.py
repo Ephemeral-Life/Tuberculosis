@@ -3,6 +3,7 @@ import json
 import random
 import time
 import torch
+import math
 import numpy as np
 from collections import OrderedDict
 from typing import List, Tuple, Optional, Dict
@@ -19,17 +20,24 @@ from flwr.server import ServerApp, ServerConfig, ServerAppComponents
 from flwr.server.strategy import FedAvg
 from flwr.simulation import run_simulation
 
+from flwr.common import parameters_to_ndarrays  # 导入反序列化函数
+
+import warnings
+warnings.filterwarnings("ignore")  # 不打印警告
+import logging
+logging.basicConfig(level=logging.WARNING)
+
 # 加载配置文件
 cfg = Config.fromfile('FTAD-TB/configs/symformer/symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
 
 # 设置训练轮数为 1 以快速验证
-cfg.runner = dict(type='EpochBasedRunner', max_epochs=1)
+cfg.runner = dict(type='EpochBasedRunner', max_epochs=cfg.max_epochs)
 
 # 设置 GPU ID（与原项目一致）
 cfg.gpu_ids = [0]
 
 # 减小批次大小以节省内存
-cfg.data.samples_per_gpu = 2  # 从默认值减小到 2
+cfg.data.samples_per_gpu = 2  # 从默认值8减小到2
 
 # 设置 optimizer_config，仅保留 grad_clip
 cfg.optimizer_config = dict(grad_clip=None)
@@ -49,7 +57,7 @@ image_ids = train_dataset.coco.getImgIds()
 random.shuffle(image_ids)
 
 # 将图像 ID 分割为子集
-num_clients = 2
+num_clients = cfg.num_clients
 partition_size = len(image_ids) // num_clients
 partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
 
@@ -187,10 +195,13 @@ class CustomFedAvg(FedAvg):
         aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
         if aggregated_parameters is not None:
             try:
-                params_dict = zip(self.model.state_dict().keys(), [torch.tensor(p) for p in aggregated_parameters.tensors])
+                # 将 bytes 反序列化为 NumPy 数组
+                aggregated_ndarrays = parameters_to_ndarrays(aggregated_parameters)
+                # 将 NumPy 数组转换为 PyTorch 张量
+                params_dict = zip(self.model.state_dict().keys(), [torch.from_numpy(np.copy(p)) for p in aggregated_ndarrays])
                 state_dict = OrderedDict({k: v for k, v in params_dict})
                 self.model.load_state_dict(state_dict, strict=True)
-                model_path = f"aggregated_model_round_{server_round}.pth"
+                model_path = f"{cfg.work_dir}/aggregated_model_round_{server_round}.pth"
                 torch.save(self.model.state_dict(), model_path)
                 print(f"Saved aggregated model to {model_path}")
             except Exception as e:
@@ -204,12 +215,12 @@ def server_fn(context: Context) -> ServerAppComponents:
     strategy = CustomFedAvg(
         fraction_fit=1.0,
         fraction_evaluate=0.5,
-        min_fit_clients=num_clients,
-        min_evaluate_clients=num_clients,
-        min_available_clients=num_clients,
+        min_fit_clients=math.ceil(num_clients / 2) ,
+        min_evaluate_clients=math.ceil(num_clients / 2),
+        min_available_clients=math.ceil(num_clients / 2),
         evaluate_metrics_aggregation_fn=weighted_average,
     )
-    config = ServerConfig(num_rounds=1)
+    config = ServerConfig(num_rounds=cfg.num_rounds)
     return ServerAppComponents(strategy=strategy, config=config)
 
 # 指定客户端资源
