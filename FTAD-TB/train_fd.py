@@ -19,8 +19,7 @@ from flwr.common import Metrics, Context, Parameters, Scalar
 from flwr.server import ServerApp, ServerConfig, ServerAppComponents
 from flwr.server.strategy import FedAvg
 from flwr.simulation import run_simulation
-
-from flwr.common import parameters_to_ndarrays  # 导入反序列化函数
+from flwr.common import parameters_to_ndarrays, ndarrays_to_parameters
 
 import warnings
 warnings.filterwarnings("ignore")  # 不打印警告
@@ -87,14 +86,12 @@ def create_client_ann_file(partition_id: int, client_image_ids: List[int]) -> st
 class FlowerClient(NumPyClient):
     def __init__(self, partition_id: int):
         self.partition_id = partition_id
-        # 构建模型（与原项目一致，不手动包装）
         self.net = build_detector(
             cfg.model,
             train_cfg=cfg.get('train_cfg'),
             test_cfg=cfg.get('test_cfg')
         )
         self.net.init_weights()
-        # 加载客户端数据集
         self.trainloader = self.load_data()
         print(f"Client {self.partition_id} initialized with dataset size: {len(self.trainloader)}")
 
@@ -140,7 +137,6 @@ class FlowerClient(NumPyClient):
             set_random_seed(seed)
         try:
             print(f"Client {self.partition_id} starting training...")
-            # 模仿原项目调用 train_detector
             train_detector(
                 self.net,
                 [self.trainloader],
@@ -175,7 +171,7 @@ def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     examples = [num_examples for num_examples, _ in metrics]
     return {"accuracy": sum(accuracies) / sum(examples) if sum(examples) > 0 else 0.0}
 
-# 自定义 FedAvg 策略以保存聚合模型
+# 自定义 FedAvg 策略以保存聚合模型并支持继续训练
 class CustomFedAvg(FedAvg):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -184,43 +180,73 @@ class CustomFedAvg(FedAvg):
             train_cfg=cfg.get('train_cfg'),
             test_cfg=cfg.get('test_cfg')
         )
+        self.start_round = 1  # 默认从第1轮开始
+
+        # 检查是否存在最新的聚合模型文件
+        model_files = [f for f in os.listdir(cfg.work_dir) if f.startswith("aggregated_model_round_") and f.endswith(".pth")]
+        if model_files:
+            rounds = [int(f.split('_')[-1].split('.')[0]) for f in model_files]
+            latest_round = max(rounds)
+            latest_model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{latest_round}.pth")
+            print(f"Loading latest aggregated model from {latest_model_path}")
+            state_dict = torch.load(latest_model_path)
+            self.model.load_state_dict(state_dict, strict=True)
+            self.start_round = latest_round + 1  # 从下一轮开始
+        else:
+            print("No aggregated model found, starting from scratch.")
+            self.model.init_weights()
 
     def aggregate_fit(
-        self,
-        server_round: int,
-        results: List[Tuple[flwr.server.client_proxy.ClientProxy, flwr.common.FitRes]],
-        failures: List[BaseException],
+            self,
+            server_round: int,
+            results: List[Tuple[flwr.server.client_proxy.ClientProxy, flwr.common.FitRes]],
+            failures: List[BaseException],
     ) -> Tuple[Optional[Parameters], Dict[str, Scalar]]:
         print(f"Server round {server_round}: aggregating {len(results)} results, {len(failures)} failures")
         aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
         if aggregated_parameters is not None:
             try:
-                # 将 bytes 反序列化为 NumPy 数组
                 aggregated_ndarrays = parameters_to_ndarrays(aggregated_parameters)
-                # 将 NumPy 数组转换为 PyTorch 张量
-                params_dict = zip(self.model.state_dict().keys(), [torch.from_numpy(np.copy(p)) for p in aggregated_ndarrays])
+                params_dict = zip(self.model.state_dict().keys(),
+                                  [torch.from_numpy(np.copy(p)) for p in aggregated_ndarrays])
                 state_dict = OrderedDict({k: v for k, v in params_dict})
                 self.model.load_state_dict(state_dict, strict=True)
-                model_path = f"{cfg.work_dir}/aggregated_model_round_{server_round}.pth"
+                # 计算实际的全局轮次
+                actual_round = self.start_round + server_round - 1
+                model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
                 torch.save(self.model.state_dict(), model_path)
                 print(f"Saved aggregated model to {model_path}")
             except Exception as e:
                 print(f"Error saving aggregated model: {e}")
         else:
-            print(f"No aggregated parameters for round {server_round}, results: {len(results)}, failures: {len(failures)}")
+            print(
+                f"No aggregated parameters for round {server_round}, results: {len(results)}, failures: {len(failures)}")
         return aggregated_parameters, metrics
+
+    def configure_fit(self, server_round: int, parameters: Parameters, client_manager):
+        # 如果是第一轮且加载了已有模型，使用加载的参数
+        if server_round == 1 and self.start_round > 1:
+            state_dict = self.model.state_dict()
+            ndarrays = [val.cpu().numpy() for val in state_dict.values()]
+            parameters = ndarrays_to_parameters(ndarrays)
+        return super().configure_fit(server_round, parameters, client_manager)
 
 # 定义 server_fn
 def server_fn(context: Context) -> ServerAppComponents:
     strategy = CustomFedAvg(
         fraction_fit=1.0,
         fraction_evaluate=0.5,
-        min_fit_clients=math.ceil(num_clients / 2) ,
+        min_fit_clients=math.ceil(num_clients / 2),
         min_evaluate_clients=math.ceil(num_clients / 2),
         min_available_clients=math.ceil(num_clients / 2),
         evaluate_metrics_aggregation_fn=weighted_average,
     )
-    config = ServerConfig(num_rounds=cfg.num_rounds)
+    # 调整 num_rounds，减去已完成的轮次
+    start_round = strategy.start_round if hasattr(strategy, 'start_round') else 1
+    num_rounds = cfg.num_rounds
+    if start_round > 1:
+        num_rounds -= (start_round - 1)
+    config = ServerConfig(num_rounds=num_rounds)
     return ServerAppComponents(strategy=strategy, config=config)
 
 # 指定客户端资源
