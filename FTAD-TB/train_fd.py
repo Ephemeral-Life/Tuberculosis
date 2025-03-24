@@ -36,7 +36,7 @@ cfg.runner = dict(type='EpochBasedRunner', max_epochs=cfg.max_epochs)
 cfg.gpu_ids = [0]
 
 # 减小批次大小以节省内存
-cfg.data.samples_per_gpu = 2  # 从默认值8减小到2
+cfg.data.samples_per_gpu = 2  # 从默认值8减小到4
 
 # 设置 optimizer_config，仅保留 grad_clip
 cfg.optimizer_config = dict(grad_clip=None)
@@ -57,6 +57,7 @@ random.shuffle(image_ids)
 
 # 将图像 ID 分割为子集
 num_clients = cfg.num_clients
+random.shuffle(image_ids)
 partition_size = len(image_ids) // num_clients
 partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
 
@@ -183,7 +184,10 @@ class CustomFedAvg(FedAvg):
         self.start_round = 1  # 默认从第1轮开始
 
         # 检查是否存在最新的聚合模型文件
-        model_files = [f for f in os.listdir(cfg.work_dir) if f.startswith("aggregated_model_round_") and f.endswith(".pth")]
+        try:
+            model_files = [f for f in os.listdir(cfg.work_dir) if f.startswith("aggregated_model_round_") and f.endswith(".pth")]
+        except FileNotFoundError:
+            model_files = None
         if model_files:
             rounds = [int(f.split('_')[-1].split('.')[0]) for f in model_files]
             latest_round = max(rounds)

@@ -221,7 +221,7 @@ def main():
 
     if args.txt:
         os.makedirs(os.path.dirname(args.txt), exist_ok=True)
-        with open(args.txt, 'a') as file:
+        with open(args.txt, 'w') as file:
             for idx, output in enumerate(outputs):
                 if max_idx[idx] == 2:
                     new_outputs.append(output)
