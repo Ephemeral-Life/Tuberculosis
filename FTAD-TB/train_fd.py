@@ -36,7 +36,7 @@ cfg.runner = dict(type='EpochBasedRunner', max_epochs=cfg.max_epochs)
 cfg.gpu_ids = [0]
 
 # 减小批次大小以节省内存
-cfg.data.samples_per_gpu = 2  # 从默认值8减小到4
+cfg.data.samples_per_gpu = 8  # 从默认值8减小到4
 
 # 设置 optimizer_config，仅保留 grad_clip
 cfg.optimizer_config = dict(grad_clip=None)
