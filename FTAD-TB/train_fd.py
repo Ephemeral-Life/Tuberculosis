@@ -22,50 +22,50 @@ from flwr.simulation import run_simulation
 from flwr.common import parameters_to_ndarrays, ndarrays_to_parameters
 
 import warnings
-warnings.filterwarnings("ignore")  # Suppress warnings
+warnings.filterwarnings("ignore")  # 不打印警告
 import logging
 logging.basicConfig(level=logging.WARNING)
 
-# Load configuration file
+# 加载配置文件
 cfg = Config.fromfile('FTAD-TB/configs/symformer/symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
 
-# Set training epochs for quick validation
+# 设置训练轮数为 1 以快速验证
 cfg.runner = dict(type='EpochBasedRunner', max_epochs=cfg.max_epochs)
 
-# Set GPU ID (consistent with original project)
+# 设置 GPU ID（与原项目一致）
 cfg.gpu_ids = [0]
 
-# Reduce batch size to save memory
-cfg.data.samples_per_gpu = 2  # Reduced from default 8 to 4
+# 减小批次大小以节省内存
+cfg.data.samples_per_gpu = 2  # 从默认值8减小到4
 
-# Configure optimizer, retaining only grad_clip
+# 设置 optimizer_config，仅保留 grad_clip
 cfg.optimizer_config = dict(grad_clip=None)
 
-# Register DATASETS and PIPELINES
+# 注册 DATASETS 和 PIPELINES
 DATASETS = Registry('dataset')
 PIPELINES = Registry('pipeline')
 DATASETS.register_module(CocoDataset)
 
-# Build the full training dataset
+# 构建完整训练数据集
 train_dataset = build_from_cfg(cfg.data.train, DATASETS, default_args=None)
 
-# Get all image IDs
+# 获取所有图像的 ID
 image_ids = train_dataset.coco.getImgIds()
 
-# Shuffle image IDs for randomness
+# 打乱图像 ID，确保随机性
 random.shuffle(image_ids)
 
-# Split image IDs into subsets for clients
+# 将图像 ID 分割为子集
 num_clients = cfg.num_clients
 random.shuffle(image_ids)
 partition_size = len(image_ids) // num_clients
 partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
 
-# Create temporary directory for client annotation files
+# 创建临时目录存储客户端标注文件
 temp_dir = 'temp_client_ann'
 os.makedirs(temp_dir, exist_ok=True)
 
-# Function to generate temporary annotation file for each client
+# 定义一个函数，为每个客户端生成临时的标注文件
 def create_client_ann_file(partition_id: int, client_image_ids: List[int]) -> str:
     coco = COCO(cfg.data.train.ann_file)
     client_imgs = [img for img in coco.imgs.values() if img['id'] in client_image_ids]
@@ -83,7 +83,7 @@ def create_client_ann_file(partition_id: int, client_image_ids: List[int]) -> st
         json.dump(client_coco, f)
     return temp_ann_file
 
-# Define Flower client class
+# 定义 Flower 客户端类
 class FlowerClient(NumPyClient):
     def __init__(self, partition_id: int):
         self.partition_id = partition_id
@@ -132,26 +132,12 @@ class FlowerClient(NumPyClient):
             raise
 
     def fit(self, parameters: List[np.ndarray], config) -> Tuple[List[np.ndarray], int, dict]:
-        server_round = config.get("server_round", 1)  # Get current round from config, default to 1
-        if server_round == 1:
-            print(f"Client {self.partition_id} using load_from for round 1")
-            # Load model from cfg.load_from for the first round
-            if cfg.load_from:
-                try:
-                    self.net.load_state_dict(torch.load(cfg.load_from), strict=True)
-                    print(f"Client {self.partition_id} loaded model from {cfg.load_from}")
-                except Exception as e:
-                    print(f"Client {self.partition_id} failed to load model from {cfg.load_from}: {e}")
-                    raise
-        else:
-            print(f"Client {self.partition_id} using server parameters for round {server_round}")
-            self.set_parameters(parameters)  # Use server-provided global model parameters
-
+        self.set_parameters(parameters)
         seed = cfg.get('seed', None)
         if seed is not None:
             set_random_seed(seed)
         try:
-            print(f"Client {self.partition_id} starting training for round {server_round}...")
+            print(f"Client {self.partition_id} starting training...")
             train_detector(
                 self.net,
                 [self.trainloader],
@@ -161,9 +147,9 @@ class FlowerClient(NumPyClient):
                 timestamp=time.strftime('%Y%m%d_%H%M%S', time.localtime()),
                 meta={'seed': seed}
             )
-            print(f"Client {self.partition_id} training completed for round {server_round}")
+            print(f"Client {self.partition_id} training completed")
         except Exception as e:
-            print(f"Client {self.partition_id} training failed for round {server_round}: {e}")
+            print(f"Client {self.partition_id} training failed: {e}")
             raise
         params = self.get_parameters(config)
         return params, len(self.trainloader), {}
@@ -172,21 +158,21 @@ class FlowerClient(NumPyClient):
         self.set_parameters(parameters)
         return 0.0, len(self.trainloader), {"accuracy": 0.0}
 
-# Define client_fn
+# 定义 client_fn
 def client_fn(context: Context) -> Client:
     partition_id = context.node_config["partition-id"]
     return FlowerClient(partition_id).to_client()
 
-# Create ClientApp
+# 创建 ClientApp
 client = ClientApp(client_fn=client_fn)
 
-# Define weighted_average function for metrics aggregation
+# 定义 weighted_average 函数
 def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     accuracies = [num_examples * m["accuracy"] for num_examples, m in metrics]
     examples = [num_examples for num_examples, _ in metrics]
     return {"accuracy": sum(accuracies) / sum(examples) if sum(examples) > 0 else 0.0}
 
-# Custom FedAvg strategy to save aggregated models and support continued training
+# 自定义 FedAvg 策略以保存聚合模型并支持继续训练
 class CustomFedAvg(FedAvg):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -195,9 +181,9 @@ class CustomFedAvg(FedAvg):
             train_cfg=cfg.get('train_cfg'),
             test_cfg=cfg.get('test_cfg')
         )
-        self.start_round = 1  # Default start from round 1
+        self.start_round = 1  # 默认从第1轮开始
 
-        # Check for existing aggregated model files
+        # 检查是否存在最新的聚合模型文件
         try:
             model_files = [f for f in os.listdir(cfg.work_dir) if f.startswith("aggregated_model_round_") and f.endswith(".pth")]
         except FileNotFoundError:
@@ -209,7 +195,7 @@ class CustomFedAvg(FedAvg):
             print(f"Loading latest aggregated model from {latest_model_path}")
             state_dict = torch.load(latest_model_path)
             self.model.load_state_dict(state_dict, strict=True)
-            self.start_round = latest_round + 1  # Resume from next round
+            self.start_round = latest_round + 1  # 从下一轮开始
         else:
             print("No aggregated model found, starting from scratch.")
             self.model.init_weights()
@@ -229,7 +215,7 @@ class CustomFedAvg(FedAvg):
                                   [torch.from_numpy(np.copy(p)) for p in aggregated_ndarrays])
                 state_dict = OrderedDict({k: v for k, v in params_dict})
                 self.model.load_state_dict(state_dict, strict=True)
-                # Calculate actual global round
+                # 计算实际的全局轮次
                 actual_round = self.start_round + server_round - 1
                 model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
                 torch.save(self.model.state_dict(), model_path)
@@ -237,27 +223,19 @@ class CustomFedAvg(FedAvg):
             except Exception as e:
                 print(f"Error saving aggregated model: {e}")
         else:
-            print(f"No aggregated parameters for round {server_round}, results: {len(results)}, failures: {len(failures)}")
+            print(
+                f"No aggregated parameters for round {server_round}, results: {len(results)}, failures: {len(failures)}")
         return aggregated_parameters, metrics
 
     def configure_fit(self, server_round: int, parameters: Parameters, client_manager):
-        # Pass server_round to clients via config
-        config = {"server_round": server_round}
-        if server_round == 1 and self.start_round == 1:
-            # First round with no prior aggregated model; clients use load_from
-            pass
-        else:
-            # Subsequent rounds or resumed training; send aggregated model parameters
+        # 如果是第一轮且加载了已有模型，使用加载的参数
+        if server_round == 1 and self.start_round > 1:
             state_dict = self.model.state_dict()
             ndarrays = [val.cpu().numpy() for val in state_dict.values()]
             parameters = ndarrays_to_parameters(ndarrays)
+        return super().configure_fit(server_round, parameters, client_manager)
 
-        fit_config = super().configure_fit(server_round, parameters, client_manager)
-        for client, fit in fit_config:
-            fit.config.update(config)
-        return fit_config
-
-# Define server_fn
+# 定义 server_fn
 def server_fn(context: Context) -> ServerAppComponents:
     strategy = CustomFedAvg(
         fraction_fit=1.0,
@@ -267,7 +245,7 @@ def server_fn(context: Context) -> ServerAppComponents:
         min_available_clients=math.ceil(num_clients / 2),
         evaluate_metrics_aggregation_fn=weighted_average,
     )
-    # Adjust num_rounds based on completed rounds
+    # 调整 num_rounds，减去已完成的轮次
     start_round = strategy.start_round if hasattr(strategy, 'start_round') else 1
     num_rounds = cfg.num_rounds
     if start_round > 1:
@@ -275,12 +253,12 @@ def server_fn(context: Context) -> ServerAppComponents:
     config = ServerConfig(num_rounds=num_rounds)
     return ServerAppComponents(strategy=strategy, config=config)
 
-# Specify client resources
+# 指定客户端资源
 backend_config = {"client_resources": {"num_cpus": 1.0, "num_gpus": 0.0}}
 if torch.cuda.is_available():
     backend_config["client_resources"] = {"num_cpus": 1.0, "num_gpus": 1.0}
 
-# Run simulation
+# 运行模拟
 if __name__ == "__main__":
     print("Starting simulation...")
     run_simulation(
