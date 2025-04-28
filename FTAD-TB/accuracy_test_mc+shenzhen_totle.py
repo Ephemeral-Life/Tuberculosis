@@ -59,9 +59,11 @@ def main():
         sf.write('round\ttotal\tcorrect_normal\tcorrect_other\tfalse_normal_to_other\tfalse_other_to_normal\taccuracy(%)\n')
 
     # 收集并排序所有聚合模型
+    # pattern = os.path.join(pth_dir, 'epoch_*.pth')
     pattern = os.path.join(pth_dir, 'aggregated_model_round_*.pth')
     pth_files = glob.glob(pattern)
     def get_round(fp):
+        # m = re.search(r'epoch_(\d+)\.pth$', fp)
         m = re.search(r'aggregated_model_round_(\d+)\.pth$', fp)
         return int(m.group(1)) if m else -1
     pth_files = sorted(pth_files, key=get_round)

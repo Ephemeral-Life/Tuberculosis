@@ -71,6 +71,7 @@ def main():
     # 路径设置
     data_folder = "../data/mc+shenzhen/annotations"  # 实际标签的文件夹路径
     prediction_file = "../work_dirs/symformer_retinanet_p2t_cls_flower/result/cls_result.txt"  # 模型预测结果文件路径
+    # prediction_file = "../work_dirs/symformer_retinanet_p2t_cls_flower/result/cls_result_round_10.txt"  # 模型预测结果文件路径
 
     # 读取数据
     actual_labels = read_actual_labels(data_folder)

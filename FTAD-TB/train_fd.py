@@ -31,7 +31,7 @@ logging.basicConfig(level=logging.WARNING)
 cfg = Config.fromfile('FTAD-TB/configs/symformer/symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
 cfg.runner = dict(type='EpochBasedRunner', max_epochs=cfg.max_epochs)
 cfg.gpu_ids = [0]
-cfg.data.samples_per_gpu = 2
+cfg.data.samples_per_gpu = 4
 cfg.optimizer_config = dict(grad_clip=None)
 
 # Register datasets and pipelines
@@ -130,7 +130,7 @@ class FlowerClient(NumPyClient):
         if seed is not None:
             set_random_seed(seed)
 
-        # Load dataset
+        # 加载数据集
         self.trainloader = self.load_data()
         server_round = config.get("server_round", 1)
         print(f"Client {self.partition_id} training (round {server_round})...")
@@ -156,9 +156,9 @@ class FlowerClient(NumPyClient):
             cfg.load_from = original_load_from
 
         params = self.get_parameters(config)
-        num_examples = len(self.trainloader.dataset)  # Correctly get number of samples
+        num_examples = len(self.trainloader)  # 直接使用 len(self.trainloader)
 
-        # Release dataset
+        # 释放数据集
         del self.trainloader
         self.trainloader = None
         gc.collect()
@@ -168,7 +168,7 @@ class FlowerClient(NumPyClient):
     def evaluate(self, parameters: List[np.ndarray], config) -> Tuple[float, int, dict]:
         self.set_parameters(parameters)
         self.trainloader = self.load_data()
-        num_examples = len(self.trainloader.dataset)  # Correctly get number of samples
+        num_examples = len(self.trainloader)  # 直接使用 len(self.trainloader)
         del self.trainloader
         self.trainloader = None
         gc.collect()

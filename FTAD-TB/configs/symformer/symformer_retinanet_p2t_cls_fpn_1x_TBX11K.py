@@ -2,7 +2,7 @@ seed = 42
 work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower'
 num_clients = 3
 num_rounds = 10
-max_epochs = 3
+max_epochs = 2
 log_level = 'WARNING'
 model = dict(
     type='RetinaNetClsAtt',
@@ -117,7 +117,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=8,
+    samples_per_gpu=2,
     workers_per_gpu=4,
     train=dict(
         type='CocoDataset',
@@ -132,26 +132,21 @@ data = dict(
         img_prefix='data/TBX11K/imgs/',
         pipeline=test_pipeline,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')))
-evaluation = dict(interval=30, metric='bbox')
-optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
+evaluation = dict(interval=1, metric='bbox')  # 每轮评估
+optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='step',
-    warmup='linear',
-    warmup_iters=500,
-    warmup_ratio=0.001,
-    step=[8, 11])
+    warmup=None,  # 禁用预热
+    step=[10, 15])  # 根据 num_rounds 调整
 runner = dict(type='EpochBasedRunner', max_epochs=max_epochs)
-checkpoint_config = dict(interval=6)
-log_config = dict(interval=150, hooks=[dict(type='TextLoggerHook')])
+checkpoint_config = dict(interval=1)  # 每轮保存
+log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])  # 减小日志间隔
 custom_hooks = [dict(type='NumClassCheckHook')]
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-load_from = 'work_dirs/symformer_retinanet_p2t/latest.pth'
+load_from = 'work_dirs/symformer_retinanet_p2t/latest.pth'  # 确保路径有效
 resume_from = None
-# load_from = None
-# resume_from = 'work_dirs/symformer_retinanet_p2t_cls/epoch_12.pth'
 workflow = [('train', 1)]
 gpu_ids = range(0, 2)
 find_unused_parameters = True
-
