@@ -20,7 +20,7 @@ model = dict(
         num_classes=2,
         num_query=500,
         dims_radio=1,
-        in_channels=256, 
+        in_channels=256,
         stacked_convs=4,
         feat_channels=256,
         anchor_generator=dict(
@@ -41,7 +41,7 @@ model = dict(
                 transformerlayers=dict(
                     type='SymDetrTransformerEncoderLayer',
                     attn_cfgs=dict(
-                        type='SymMultiScaleDeformableAttention', 
+                        type='SymMultiScaleDeformableAttention',
                         embed_dims=256,
                         num_levels=1),
                     feedforward_channels=1024,
@@ -115,7 +115,7 @@ data = dict(
     workers_per_gpu=4,
     train=dict(
         type='CocoDataset',
-        ann_file='data/TBX11K/annotations/json/all_trainval.json',
+        ann_file='data/TBX11K/annotations/json/all_trainval_without_extra.json',
         img_prefix='data/TBX11K/imgs/',
         pipeline=train_pipeline,
         filter_empty_gt=False,
@@ -135,7 +135,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=0.001,
     step=[8, 11])
-runner = dict(type='EpochBasedRunner', max_epochs=12)
+runner = dict(type='EpochBasedRunner', max_epochs=36)
 checkpoint_config = dict(interval=6)
 log_config = dict(interval=150, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]

@@ -20,8 +20,8 @@ model = dict(
         num_classes=2,
         num_query=500,
         dims_radio=1,
-        in_channels=256, 
-        stacked_convs=4, 
+        in_channels=256,
+        stacked_convs=4,
         feat_channels=256,
         anchor_generator=dict(
             type='AnchorGenerator',
@@ -41,7 +41,7 @@ model = dict(
                 transformerlayers=dict(
                     type='SymDetrTransformerEncoderLayer',
                     attn_cfgs=dict(
-                        type='SymMultiScaleDeformableAttention', 
+                        type='SymMultiScaleDeformableAttention',
                         embed_dims=256,
                         num_levels=1),
                     feedforward_channels=1024,
@@ -63,7 +63,7 @@ model = dict(
     train_cfg=dict(
         assigner=dict(
             type='MaxIoUAssigner',
-            pos_iou_thr=0.5, 
+            pos_iou_thr=0.5,
             neg_iou_thr=0.4,
             min_pos_iou=0,
             ignore_iof_thr=-1),
@@ -129,7 +129,7 @@ lr_config = dict(
     warmup_ratio=0.001,
     step=[16, 22])
     # step=[8, 11])
-runner = dict(type='EpochBasedRunner', max_epochs=24)
+runner = dict(type='EpochBasedRunner', max_epochs=72)
 checkpoint_config = dict(interval=24)
 log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]
