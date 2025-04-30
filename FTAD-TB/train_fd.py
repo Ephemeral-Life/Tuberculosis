@@ -27,38 +27,38 @@ warnings.filterwarnings("ignore")
 import logging
 logging.basicConfig(level=logging.WARNING)
 
-# Load configuration
+# 加载配置
 cfg = Config.fromfile('FTAD-TB/configs/symformer/symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
 cfg.runner = dict(type='EpochBasedRunner', max_epochs=cfg.max_epochs)
 cfg.gpu_ids = [0]
 cfg.data.samples_per_gpu = 4
 cfg.optimizer_config = dict(grad_clip=None)
 
-# Register datasets and pipelines
+# 注册数据集和管道
 DATASETS = Registry('dataset')
 PIPELINES = Registry('pipeline')
 DATASETS.register_module(CocoDataset)
 
-# Build training dataset
+# 构建训练数据集
 train_dataset = build_from_cfg(cfg.data.train, DATASETS, default_args=None)
 image_ids = train_dataset.coco.getImgIds()
 random.shuffle(image_ids)
 
-# Partition image IDs for clients
+# 为客户端划分图像ID
 num_clients = cfg.num_clients
 random.shuffle(image_ids)
 partition_size = len(image_ids) // num_clients
 partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
 
-# Temporary directory for client annotations
+# 临时目录用于客户端注解
 temp_dir = 'temp_client_ann'
 os.makedirs(temp_dir, exist_ok=True)
 
-# Precompute client annotation files
+# 预计算客户端注解文件（在循环外加载COCO annotation）
 client_ann_files = []
+coco = COCO(cfg.data.train.ann_file)  # 只加载一次COCO annotation文件
 for partition_id in range(num_clients):
     client_image_ids = partitions[partition_id]
-    coco = COCO(cfg.data.train.ann_file)
     client_imgs = [img for img in coco.imgs.values() if img['id'] in client_image_ids]
     client_ann_ids = coco.getAnnIds(imgIds=client_image_ids)
     client_anns = [coco.anns[ann_id] for ann_id in client_ann_ids]
@@ -73,10 +73,10 @@ for partition_id in range(num_clients):
     with open(temp_ann_file, 'w') as f:
         json.dump(client_coco, f)
     client_ann_files.append(temp_ann_file)
-    del coco  # Release COCO object
-    gc.collect()
+del coco  # 释放COCO对象
+gc.collect()
 
-# Flower client class
+# Flower客户端类
 class FlowerClient(NumPyClient):
     def __init__(self, partition_id: int):
         self.partition_id = partition_id
@@ -85,10 +85,10 @@ class FlowerClient(NumPyClient):
             train_cfg=cfg.get('train_cfg'),
             test_cfg=cfg.get('test_cfg')
         )
-        self.net.init_weights()
-        self.ann_file = client_ann_files[partition_id]  # Use precomputed annotation file
-        self.trainloader = None  # Delay dataset loading
-        print(f"Client {self.partition_id} initialized with annotation file: {self.ann_file}")
+        # 移除init_weights()调用，确保从服务器参数开始
+        self.ann_file = client_ann_files[partition_id]  # 使用预计算的注解文件
+        self.trainloader = None  # 延迟加载数据集
+        print(f"客户端 {self.partition_id} 初始化，注解文件: {self.ann_file}")
 
     def load_data(self):
         client_cfg = dict(
@@ -101,16 +101,16 @@ class FlowerClient(NumPyClient):
         )
         try:
             client_dataset = build_from_cfg(client_cfg, DATASETS, default_args=None)
-            print(f"Client {self.partition_id} loaded dataset, images: {len(client_dataset)}")
+            print(f"客户端 {self.partition_id} 加载数据集，图像数量: {len(client_dataset)}")
             return client_dataset
         except Exception as e:
-            print(f"Client {self.partition_id} failed to load dataset: {e}")
+            print(f"客户端 {self.partition_id} 加载数据集失败: {e}")
             raise
 
     def get_parameters(self, config) -> List[np.ndarray]:
-        with torch.no_grad():  # Reduce memory usage
+        with torch.no_grad():  # 减少内存使用
             params = [val.cpu().numpy() for _, val in self.net.state_dict().items()]
-        print(f"Client {self.partition_id} returned {len(params)} parameters")
+        print(f"客户端 {self.partition_id} 返回 {len(params)} 个参数")
         return params
 
     def set_parameters(self, parameters: List[np.ndarray]):
@@ -119,13 +119,13 @@ class FlowerClient(NumPyClient):
         new_state_dict = OrderedDict({k: torch.tensor(v) for k, v in params_dict})
         try:
             self.net.load_state_dict(new_state_dict, strict=True)
-            print(f"Client {self.partition_id} parameters set")
+            print(f"客户端 {self.partition_id} 参数设置完成")
         except Exception as e:
-            print(f"Client {self.partition_id} failed to set parameters: {e}")
+            print(f"客户端 {self.partition_id} 参数设置失败: {e}")
             raise
 
     def fit(self, parameters: List[np.ndarray], config) -> Tuple[List[np.ndarray], int, dict]:
-        self.set_parameters(parameters)
+        self.set_parameters(parameters)  # 在训练前设置参数
         seed = cfg.get('seed', None)
         if seed is not None:
             set_random_seed(seed)
@@ -133,7 +133,7 @@ class FlowerClient(NumPyClient):
         # 加载数据集
         self.trainloader = self.load_data()
         server_round = config.get("server_round", 1)
-        print(f"Client {self.partition_id} training (round {server_round})...")
+        print(f"客户端 {self.partition_id} 训练（轮次 {server_round}）...")
 
         original_load_from = cfg.get('load_from', None)
         cfg.load_from = None
@@ -148,16 +148,15 @@ class FlowerClient(NumPyClient):
                 timestamp=time.strftime('%Y%m%d_%H%M%S', time.localtime()),
                 meta={'seed': seed}
             )
-            print(f"Client {self.partition_id} training completed")
+            print(f"客户端 {self.partition_id} 训练完成")
         except Exception as e:
-            print(f"Client {self.partition_id} training failed: {e}")
+            print(f"客户端 {self.partition_id} 训练失败: {e}")
             raise
         finally:
             cfg.load_from = original_load_from
 
         params = self.get_parameters(config)
-        num_examples = len(self.trainloader)  # 直接使用 len(self.trainloader)
-
+        num_examples = len(self.trainloader)  # 表示图像数量，而非批次数量
         # 释放数据集
         del self.trainloader
         self.trainloader = None
@@ -168,30 +167,30 @@ class FlowerClient(NumPyClient):
     def evaluate(self, parameters: List[np.ndarray], config) -> Tuple[float, int, dict]:
         self.set_parameters(parameters)
         self.trainloader = self.load_data()
-        num_examples = len(self.trainloader)  # 直接使用 len(self.trainloader)
+        num_examples = len(self.trainloader)  # 表示图像数量，而非批次数量
         del self.trainloader
         self.trainloader = None
         gc.collect()
+        # TODO: 实现实际的评估逻辑
         return 0.0, num_examples, {"accuracy": 0.0}
 
-# Client factory function
+# 客户端工厂函数
 def client_fn(context: Context) -> Client:
     partition_id = context.node_config["partition-id"]
     return FlowerClient(partition_id).to_client()
 
-# Create ClientApp
+# 创建ClientApp
 client = ClientApp(client_fn=client_fn)
 
-# Weighted average for metrics
+# 权重平均用于指标
 def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     accuracies = [num_examples * m["accuracy"] for num_examples, m in metrics]
     examples = [num_examples for num_examples, _ in metrics]
     return {"accuracy": sum(accuracies) / sum(examples) if sum(examples) > 0 else 0.0}
 
-# Custom FedAvg strategy
+# 自定义FedAvg策略
 class CustomFedAvg(FedAvg):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.model = build_detector(
             cfg.model,
             train_cfg=cfg.get('train_cfg'),
@@ -204,12 +203,12 @@ class CustomFedAvg(FedAvg):
                 checkpoint = torch.load(cfg.load_from)
                 state_dict = checkpoint.get('state_dict', checkpoint)
                 self.model.load_state_dict(state_dict, strict=False)
-                print(f"Server loaded initial model: {cfg.load_from}")
+                print(f"服务器加载初始模型: {cfg.load_from}")
             except Exception as e:
-                print(f"Server failed to load initial model: {e}")
+                print(f"服务器加载初始模型失败: {e}")
                 raise
         else:
-            print("No cfg.load_from specified, using random initialized model")
+            print("未指定cfg.load_from，使用随机初始化的模型")
             self.model.init_weights()
 
         try:
@@ -221,11 +220,15 @@ class CustomFedAvg(FedAvg):
             rounds = [int(f.split('_')[-1].split('.')[0]) for f in model_files]
             latest_round = max(rounds)
             latest_model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{latest_round}.pth")
-            print(f"Loading latest aggregated model: {latest_model_path}")
+            print(f"加载最新的聚合模型: {latest_model_path}")
             checkpoint = torch.load(latest_model_path)
             state_dict = checkpoint.get('state_dict', checkpoint)
             self.model.load_state_dict(state_dict, strict=True)
             self.start_round = latest_round + 1
+
+        # 将模型参数传递给initial_parameters
+        initial_parameters = ndarrays_to_parameters([val.cpu().numpy() for val in self.model.state_dict().values()])
+        super().__init__(*args, initial_parameters=initial_parameters, **kwargs)
 
     def configure_fit(self, server_round: int, parameters: Parameters, client_manager):
         client_instructions = super().configure_fit(server_round, parameters, client_manager)
@@ -239,7 +242,7 @@ class CustomFedAvg(FedAvg):
             results: List[Tuple[flwr.server.client_proxy.ClientProxy, flwr.common.FitRes]],
             failures: List[BaseException],
     ) -> Tuple[Optional[Parameters], Dict[str, Scalar]]:
-        print(f"Server round {server_round}: aggregating {len(results)} results, {len(failures)} failures")
+        print(f"服务器轮次 {server_round}: 聚合 {len(results)} 个结果, {len(failures)} 个失败")
         aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
         if aggregated_parameters is not None:
             try:
@@ -251,16 +254,16 @@ class CustomFedAvg(FedAvg):
                 actual_round = self.start_round + server_round - 1
                 model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
                 torch.save(self.model.state_dict(), model_path)
-                print(f"Saved aggregated model to {model_path}")
+                print(f"保存聚合模型到 {model_path}")
             except Exception as e:
-                print(f"Failed to save aggregated model: {e}")
+                print(f"保存聚合模型失败: {e}")
         else:
-            print(f"Round {server_round} no aggregated parameters, results: {len(results)}, failures: {len(failures)}")
+            print(f"轮次 {server_round} 没有聚合参数, 结果: {len(results)}, 失败: {len(failures)}")
 
-        gc.collect()  # Clean up after aggregation
+        gc.collect()  # 聚合后清理
         return aggregated_parameters, metrics
 
-# Server factory function
+# 服务器工厂函数
 def server_fn(context: Context) -> ServerAppComponents:
     strategy = CustomFedAvg(
         fraction_fit=1.0,
@@ -277,14 +280,14 @@ def server_fn(context: Context) -> ServerAppComponents:
     config = ServerConfig(num_rounds=num_rounds)
     return ServerAppComponents(strategy=strategy, config=config)
 
-# Client resources
+# 客户端资源
 backend_config = {"client_resources": {"num_cpus": 1.0, "num_gpus": 0.0}}
 if torch.cuda.is_available():
     backend_config["client_resources"] = {"num_cpus": 1.0, "num_gpus": 1.0}
 
-# Run simulation
+# 运行模拟
 if __name__ == "__main__":
-    print("Starting simulation...")
+    print("开始模拟...")
     run_simulation(
         server_app=ServerApp(server_fn=server_fn),
         client_app=client,

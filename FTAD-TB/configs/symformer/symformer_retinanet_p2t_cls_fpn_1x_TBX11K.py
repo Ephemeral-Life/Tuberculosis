@@ -2,7 +2,7 @@ seed = 42
 work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower'
 num_clients = 3
 num_rounds = 10
-max_epochs = 2
+max_epochs = 5
 log_level = 'WARNING'
 model = dict(
     type='RetinaNetClsAtt',
@@ -117,7 +117,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=2,
+    samples_per_gpu=8,
     workers_per_gpu=4,
     train=dict(
         type='CocoDataset',
@@ -128,8 +128,8 @@ data = dict(
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')),
     val=dict(
         type='CocoDataset',
-        ann_file='data/g/annotations/test_dataset.json',
-        img_prefix='data/TBX11K/imgs/',
+        ann_file='data/g/g_val/test_dataset.json',
+        img_prefix='data/g/g_val/imgs/',
         pipeline=test_pipeline,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')))
 evaluation = dict(interval=1, metric='bbox')  # 每轮评估

@@ -65,8 +65,8 @@ def main():
     meta['config'] = cfg.pretty_text
 
     # 记录基本信息
-    logger.info(f'Distributed training: {distributed}')
-    logger.info(f'Config:\n{cfg.pretty_text}')
+    # logger.info(f'Distributed training: {distributed}')
+    # logger.info(f'Config:\n{cfg.pretty_text}')
 
     # 设置随机种子（如果 seed 不为 None）
     if seed is not None:

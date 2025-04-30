@@ -20,10 +20,10 @@ from mmdet.utils import get_root_logger
 def build_optimizer(model, cfg):
     optimizer_cfg = copy.deepcopy(cfg)
     stage = optimizer_cfg.pop('stage', None)
-    
-    print(type(model))
-    print()
-    print(model)
+
+    # print(type(model))
+    # print()
+    # print(model)
     if stage is 'finetune':
         model.module.requires_grad_(False)
         model.module.bbox_head.classifier.requires_grad_(True)
