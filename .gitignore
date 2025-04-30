@@ -118,10 +118,8 @@ mmdet/.mim
 work_dirs/
 
 # Pytorch
-*.pth
 *.py~
 *.sh~
 
 .github/
 data
-pretrained
