@@ -90,6 +90,13 @@ class FlowerClient(NumPyClient):
         self.trainloader = None  # 延迟加载数据集
         print(f"客户端 {self.partition_id} 初始化，注解文件: {self.ann_file}")
 
+    def freeze_parameters(self):
+        for name, param in self.net.named_parameters():
+            if "backbone" in name or "neck" in name or "bbox_head" in name:
+                param.requires_grad = False
+            else:
+                param.requires_grad = True
+
     def load_data(self):
         client_cfg = dict(
             type='CocoDataset',
@@ -134,6 +141,9 @@ class FlowerClient(NumPyClient):
         self.trainloader = self.load_data()
         server_round = config.get("server_round", 1)
         print(f"客户端 {self.partition_id} 训练（轮次 {server_round}）...")
+
+        # Freeze backbone and detection head parameters
+        self.freeze_parameters()
 
         original_load_from = cfg.get('load_from', None)
         cfg.load_from = None

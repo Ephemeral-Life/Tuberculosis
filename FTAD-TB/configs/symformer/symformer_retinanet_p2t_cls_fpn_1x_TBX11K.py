@@ -127,11 +127,11 @@ data = dict(
         filter_empty_gt=False,
         classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')),
     val=dict(
-        type='CocoDataset',
-        ann_file='data/g/g_val/test_dataset.json',
+        type='CocoClassificationDataset',
+        ann_file='data/g/g_val/val_dataset.json',
         img_prefix='data/g/g_val/imgs/',
         pipeline=test_pipeline,
-        classes=('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')))
+        classes=('healthy', 'sick_non_tb', 'tb')))
 evaluation = dict(interval=1, metric='bbox')  # 每轮评估
 optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
 optimizer_config = dict(grad_clip=None)
