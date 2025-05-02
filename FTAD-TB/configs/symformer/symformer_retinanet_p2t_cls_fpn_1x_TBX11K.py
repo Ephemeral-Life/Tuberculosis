@@ -129,16 +129,18 @@ data = dict(
     val=dict(
         type='CocoClassificationDataset',
         ann_file='data/g/g_val/val_dataset.json',
-        img_prefix='data/g/g_val/imgs/',
+        img_prefix='data/g/g_val/img/',
         pipeline=test_pipeline,
         classes=('healthy', 'sick_non_tb', 'tb')))
 evaluation = dict(interval=1, metric='bbox')  # 每轮评估
-optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
+optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='step',
-    warmup=None,  # 禁用预热
-    step=[10, 15])  # 根据 num_rounds 调整
+    warmup='linear',
+    warmup_iters=500,
+    warmup_ratio=0.001,
+    step=[3, 4])
 runner = dict(type='EpochBasedRunner', max_epochs=max_epochs)
 checkpoint_config = dict(interval=1)  # 每轮保存
 log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])  # 减小日志间隔

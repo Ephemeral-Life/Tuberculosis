@@ -9,9 +9,9 @@ from collections import OrderedDict
 from typing import List, Tuple, Optional, Dict
 from mmcv import Config
 from mmcv.utils import Registry, build_from_cfg
-from mmdet.datasets import CocoDataset
+from mmdet.datasets import CocoDataset, build_dataset, build_dataloader
 from mmdet.models import build_detector
-from mmdet.apis import train_detector, set_random_seed
+from mmdet.apis import train_detector, set_random_seed, single_gpu_test
 from pycocotools.coco import COCO
 import flwr
 from flwr.client import Client, ClientApp, NumPyClient
@@ -20,11 +20,15 @@ from flwr.server import ServerApp, ServerConfig, ServerAppComponents
 from flwr.server.strategy import FedAvg
 from flwr.simulation import run_simulation
 from flwr.common import parameters_to_ndarrays, ndarrays_to_parameters
+from mmcv.parallel import MMDataParallel
+from coco_classification import CocoClassificationDataset
 import gc
 
 import warnings
+
 warnings.filterwarnings("ignore")
 import logging
+
 logging.basicConfig(level=logging.WARNING)
 
 # 加载配置
@@ -75,6 +79,7 @@ for partition_id in range(num_clients):
     client_ann_files.append(temp_ann_file)
 del coco  # 释放COCO对象
 gc.collect()
+
 
 # Flower客户端类
 class FlowerClient(NumPyClient):
@@ -184,13 +189,16 @@ class FlowerClient(NumPyClient):
         # TODO: 实现实际的评估逻辑
         return 0.0, num_examples, {"accuracy": 0.0}
 
+
 # 客户端工厂函数
 def client_fn(context: Context) -> Client:
     partition_id = context.node_config["partition-id"]
     return FlowerClient(partition_id).to_client()
 
+
 # 创建ClientApp
 client = ClientApp(client_fn=client_fn)
+
 
 # 权重平均用于指标
 def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
@@ -198,7 +206,8 @@ def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     examples = [num_examples for num_examples, _ in metrics]
     return {"accuracy": sum(accuracies) / sum(examples) if sum(examples) > 0 else 0.0}
 
-# 自定义FedAvg策略
+
+# 自定义FedAvg策略（第四步核心修改）
 class CustomFedAvg(FedAvg):
     def __init__(self, *args, **kwargs):
         self.model = build_detector(
@@ -208,6 +217,7 @@ class CustomFedAvg(FedAvg):
         )
         self.start_round = 1
 
+        # 加载初始模型权重
         if cfg.get('load_from', None):
             try:
                 checkpoint = torch.load(cfg.load_from)
@@ -221,6 +231,7 @@ class CustomFedAvg(FedAvg):
             print("未指定cfg.load_from，使用随机初始化的模型")
             self.model.init_weights()
 
+        # 检查并加载最新的聚合模型
         try:
             model_files = [f for f in os.listdir(cfg.work_dir) if
                            f.startswith("aggregated_model_round_") and f.endswith(".pth")]
@@ -240,6 +251,21 @@ class CustomFedAvg(FedAvg):
         initial_parameters = ndarrays_to_parameters([val.cpu().numpy() for val in self.model.state_dict().values()])
         super().__init__(*args, initial_parameters=initial_parameters, **kwargs)
 
+        # 加载评估数据集
+        try:
+            self.val_dataset = build_dataset(cfg.data.val)
+            self.val_dataloader = build_dataloader(
+                self.val_dataset,
+                samples_per_gpu=cfg.data.samples_per_gpu,
+                workers_per_gpu=cfg.data.workers_per_gpu,
+                dist=False,
+                shuffle=False
+            )
+            print("服务器端加载评估数据集完成")
+        except Exception as e:
+            print(f"服务器端加载评估数据集失败: {e}")
+            raise
+
     def configure_fit(self, server_round: int, parameters: Parameters, client_manager):
         client_instructions = super().configure_fit(server_round, parameters, client_manager)
         for instruction in client_instructions:
@@ -256,22 +282,59 @@ class CustomFedAvg(FedAvg):
         aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
         if aggregated_parameters is not None:
             try:
+                # 将聚合后的参数加载到模型
                 aggregated_ndarrays = parameters_to_ndarrays(aggregated_parameters)
                 params_dict = zip(self.model.state_dict().keys(),
                                   [torch.from_numpy(np.copy(p)) for p in aggregated_ndarrays])
                 state_dict = OrderedDict({k: v for k, v in params_dict})
                 self.model.load_state_dict(state_dict, strict=True)
+
+                # 保存聚合模型
                 actual_round = self.start_round + server_round - 1
                 model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
                 torch.save(self.model.state_dict(), model_path)
                 print(f"保存聚合模型到 {model_path}")
+
+                # 评估聚合模型
+                self.evaluate_aggregated_model()
             except Exception as e:
-                print(f"保存聚合模型失败: {e}")
+                print(f"聚合或评估模型失败: {e}")
         else:
             print(f"轮次 {server_round} 没有聚合参数, 结果: {len(results)}, 失败: {len(failures)}")
 
         gc.collect()  # 聚合后清理
         return aggregated_parameters, metrics
+
+    def evaluate_aggregated_model(self):
+        """评估聚合后的模型"""
+        print("开始评估聚合模型...")
+        self.model.eval()
+        try:
+            # 使用MMDataParallel包装模型以支持GPU推理
+            model = MMDataParallel(self.model, device_ids=[0])
+            # 执行推理
+            outputs = single_gpu_test(model, self.val_dataloader)
+
+            # 解析预测结果和真实标签
+            # 注意：以下假设输出的格式适用于你的模型，需根据实际情况调整
+            preds = []
+            gts = []
+            for i, output in enumerate(outputs):
+                # 假设output是一个字典，包含预测结果
+                pred = output.get('pred_label', None)  # 根据模型输出调整字段名
+                if pred is None:
+                    raise ValueError("模型输出中未找到'pred_label'，请检查single_gpu_test返回值")
+                preds.append(pred)
+                gt = self.val_dataset[i]['ann']['labels'][0]  # 假设标签存储在'ann'中的'labels'字段
+                gts.append(gt)
+
+            # 计算准确率
+            accuracy = sum(1 for p, g in zip(preds, gts) if p == g) / len(gts)
+            print(f"聚合模型评估完成，准确率: {accuracy:.4f}")
+        except Exception as e:
+            print(f"评估聚合模型失败: {e}")
+            raise
+
 
 # 服务器工厂函数
 def server_fn(context: Context) -> ServerAppComponents:
@@ -289,6 +352,7 @@ def server_fn(context: Context) -> ServerAppComponents:
         num_rounds -= (start_round - 1)
     config = ServerConfig(num_rounds=num_rounds)
     return ServerAppComponents(strategy=strategy, config=config)
+
 
 # 客户端资源
 backend_config = {"client_resources": {"num_cpus": 1.0, "num_gpus": 0.0}}
