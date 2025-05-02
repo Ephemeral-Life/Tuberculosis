@@ -18,7 +18,7 @@ def resize_image(image_path, output_path, size):
         resized_img.save(output_path)
 
 
-def split_dataset(root_dir, output_dir, num_clients=5):
+def split_dataset(root_dir, output_dir, num_clients=3):
     """
     Split the dataset into multiple clients with random distribution and resize images.
 
@@ -29,10 +29,10 @@ def split_dataset(root_dir, output_dir, num_clients=5):
     """
     # Define categories and client-specific resize sizes
     categories = ['health', 'sick', 'tb']
-    resize_sizes = [(512, 512), (256, 256), (128, 128), (64, 64), (32, 32)]
+    resize_sizes = [(512, 512), (256, 256), (128, 128)]
 
     # Define tb category distribution ratios (sum to 1)
-    tb_ratios = [0.1, 0.15, 0.35, 0.25, 0.15]  # Uneven distribution for tb
+    tb_ratios = [0.3, 0.5, 0.2]  # Uneven distribution for tb
 
     for category in categories:
         category_path = os.path.join(root_dir, category)
@@ -68,6 +68,7 @@ def split_dataset(root_dir, output_dir, num_clients=5):
                 src_path = os.path.join(category_path, image)
                 dst_path = os.path.join(client_category_path, image)
                 resize_image(src_path, dst_path, resize_sizes[client_id])
+                # shutil.copyfile(src_path, dst_path)
 
 
 def main():

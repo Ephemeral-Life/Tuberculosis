@@ -1,5 +1,6 @@
 from mmdet.datasets import DATASETS, CocoDataset
 from pycocotools.coco import COCO
+import numpy as np
 
 @DATASETS.register_module()
 class CocoClassificationDataset(CocoDataset):
@@ -15,13 +16,11 @@ class CocoClassificationDataset(CocoDataset):
             classes (tuple): 类别名称元组，例如 ('healthy', 'sick_non_tb', 'tb')
             **kwargs: 其他参数
         """
-        # 先创建 COCO 对象以获取必要信息
         self.coco = COCO(ann_file)
         self.img_ids = self.coco.getImgIds()
         self.cat_ids = self.coco.getCatIds()
         self.cat2label = {cat_id: i for i, cat_id in enumerate(self.cat_ids)}
 
-        # 调用父类初始化，禁用过滤空标注
         super(CocoClassificationDataset, self).__init__(
             ann_file=ann_file,
             pipeline=pipeline,
@@ -41,7 +40,9 @@ class CocoClassificationDataset(CocoDataset):
         """
         data_infos = []
         for img_id in self.img_ids:
-            img_info = self.coco.loadImgs(img_id)[0]  # 获取图像信息字典
+            img_info = self.coco.loadImgs(img_id)[0]
+            # 将 'file_name' 重命名为 'filename' 以适配MMDetection管道
+            img_info['filename'] = img_info.pop('file_name')
             data_infos.append(img_info)
         return data_infos
 
@@ -51,18 +52,24 @@ class CocoClassificationDataset(CocoDataset):
         Args:
             idx (int): 图像索引
         Returns:
-            dict: 包含标签的标注信息，例如 {'labels': 0}
+            dict: 包含标签的标注信息，例如 {'labels': np.array([0])}
         """
         img_id = self.img_ids[idx]
         ann_ids = self.coco.getAnnIds(imgIds=[img_id])
         anns = self.coco.loadAnns(ann_ids)
-        # 假设每张图像只有一个分类标签
         if len(anns) > 0:
             category_id = anns[0]['category_id']
             label = self.cat2label[category_id]
         else:
             label = -1  # 无标注情况
-        return dict(labels=label)
+
+        # 将 label 包装成单元素的 NumPy 数组
+        labels = np.array([label], dtype=np.int64)
+        # 创建一个空的 float32 NumPy 数组，形状为 (0, 4)
+        empty_bboxes = np.zeros((0, 4), dtype=np.float32)
+
+        # 返回包含 'labels' 和空的 'bboxes' 的字典
+        return dict(labels=labels, bboxes=empty_bboxes)
 
     def prepare_train_img(self, idx):
         """
@@ -74,12 +81,18 @@ class CocoClassificationDataset(CocoDataset):
         """
         img_info = self.data_infos[idx]
         ann_info = self.get_ann_info(idx)
-        data = dict(
+        results = dict(
             img_info=img_info,
             ann_info=ann_info,
-            img_prefix=self.img_prefix
+            img_prefix=self.img_prefix,
+            seg_prefix=self.seg_prefix,  # 通常需要，即使为空
+            proposal_file=self.proposal_file,  # 通常需要，即使为 None
+            # --- 初始化 fields 列表 ---
+            bbox_fields=[],
+            mask_fields=[],
+            seg_fields=[]
         )
-        return self.pipeline(data)
+        return self.pipeline(results)
 
     def prepare_test_img(self, idx):
         """
