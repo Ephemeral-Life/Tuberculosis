@@ -1,8 +1,8 @@
 seed = 42
 work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower'
 num_clients = 3
-num_rounds = 1
-max_epochs = 1
+num_rounds = 20
+max_epochs = 5
 log_level = 'WARNING'
 model = dict(
     type='RetinaNetClsAtt',
@@ -136,9 +136,7 @@ optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0001, stage=
 optimizer_config = dict(grad_clip=None)
 lr_config = dict(
     policy='step',
-    warmup='linear',
-    warmup_iters=500,
-    warmup_ratio=0.001,
+    warmup=None,
     step=[3, 4])
 runner = dict(type='EpochBasedRunner', max_epochs=max_epochs)
 checkpoint_config = dict(interval=1)  # 每轮保存

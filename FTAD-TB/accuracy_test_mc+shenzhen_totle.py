@@ -9,7 +9,8 @@ import subprocess
 # —— 如果你的虚拟环境目录名不是 venv，请修改下面这行路径 —— #
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)  # 获取上一级目录
-VENV_PYTHON = os.path.join(PROJECT_ROOT, 'venv', 'Scripts', 'python.exe')
+# VENV_PYTHON = os.path.join(PROJECT_ROOT, 'venv', 'Scripts', 'python.exe')
+VENV_PYTHON = '/usr/bin/python3.8'
 
 # —— 准确度计算函数 —— #
 def read_actual_labels(folder_path):
@@ -48,6 +49,7 @@ def main():
     config_path       = os.path.join(PROJECT_ROOT, 'configs', 'symformer',
                                      'symformer_retinanet_p2t_cls_fpn_1x_TBX11K_test_mc+shenzhen.py')
     pth_dir           = os.path.join(PROJECT_ROOT, 'work_dirs', 'symformer_retinanet_p2t_cls_flower')
+    # pth_dir           = "C:\\Users\\wzy\\Desktop\\work_dirs\\symformer_retinanet_p2t_cls"
     result_dir        = os.path.join(pth_dir, 'result')
     annotation_folder = os.path.join(PROJECT_ROOT, 'data', 'mc+shenzhen', 'annotations')
 
@@ -58,14 +60,24 @@ def main():
     with open(summary_file, 'w', encoding='utf-8') as sf:
         sf.write('round\ttotal\tcorrect_normal\tcorrect_other\tfalse_normal_to_other\tfalse_other_to_normal\taccuracy(%)\n')
 
-    # 收集并排序所有聚合模型
-    # pattern = os.path.join(pth_dir, 'epoch_*.pth')
-    pattern = os.path.join(pth_dir, 'aggregated_model_round_*.pth')
-    pth_files = glob.glob(pattern)
+    # 收集并排序所有 pth 文件（支持两种命名格式）
+    # 1) aggregated_model_round_*.pth
+    # 2) epoch_*.pth
+    pth_files = []
+    pth_files.extend(glob.glob(os.path.join(pth_dir, 'aggregated_model_round_*.pth')))
+    # pth_files.extend(glob.glob(os.path.join(pth_dir, 'epoch_*.pth')))
+
     def get_round(fp):
-        # m = re.search(r'epoch_(\d+)\.pth$', fp)
-        m = re.search(r'aggregated_model_round_(\d+)\.pth$', fp)
-        return int(m.group(1)) if m else -1
+        # 尝试匹配两种格式
+        m = re.search(r'aggregated_model_round_(\d+)\.pth$', os.path.basename(fp))
+        if m:
+            return int(m.group(1))
+        # m = re.search(r'epoch_(\d+)\.pth$', os.path.basename(fp))
+        # if m:
+        #     return int(m.group(1))
+        return -1
+
+    # 按轮次升序排列
     pth_files = sorted(pth_files, key=get_round)
 
     # 逐轮测试并记录
