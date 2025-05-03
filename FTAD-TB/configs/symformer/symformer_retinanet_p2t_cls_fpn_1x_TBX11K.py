@@ -1,7 +1,7 @@
 seed = 42
 work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower'
 num_clients = 3
-num_rounds = 10
+num_rounds = 1
 max_epochs = 1
 log_level = 'WARNING'
 model = dict(
@@ -105,15 +105,14 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(512, 512),
+        img_scale=(512, 512),  # 目标尺寸
         flip=False,
         transforms=[
-            dict(type='Resize', keep_ratio=True),
-            dict(type='RandomFlip'),
-            dict(type='Normalize', **img_norm_cfg),
-            dict(type='Pad', size_divisor=32),
+            dict(type='Resize', keep_ratio=False),  # 强制调整到 512x512，不保持长宽比
+            dict(type='Normalize', **img_norm_cfg),  # 归一化配置
+            dict(type='Pad', size=(512, 512)),  # 填充到 512x512
             dict(type='ImageToTensor', keys=['img']),
-            dict(type='Collect', keys=['img'])
+            dict(type='Collect', keys=['img'], meta_keys=['img_shape', 'scale_factor', 'pad_shape', 'filename', 'ori_shape'])
         ])
 ]
 data = dict(

@@ -23,65 +23,28 @@ from flwr.common import parameters_to_ndarrays, ndarrays_to_parameters
 from mmcv.parallel import MMDataParallel
 from coco_classification import CocoClassificationDataset
 import gc
-
-import warnings
-warnings.filterwarnings("ignore")
 import logging
-logging.basicConfig(level=logging.WARNING)
 
-# 加载配置
-cfg = Config.fromfile('FTAD-TB/configs/symformer/symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Load configuration
+cfg = Config.fromfile('configs/symformer/symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
 cfg.gpu_ids = [0]
 num_clients = cfg.num_clients
 
-# 注册数据集
+# Register datasets
 DATASETS = Registry('dataset')
 PIPELINES = Registry('pipeline')
 DATASETS.register_module(CocoDataset)
 DATASETS.register_module(CocoClassificationDataset)
 
-# # 构建训练数据集
-# train_dataset = build_from_cfg(cfg.data.train, DATASETS, default_args=None)
-# image_ids = train_dataset.coco.getImgIds()
-# random.shuffle(image_ids)
-#
-# # 为客户端划分图像ID
-# num_clients = cfg.num_clients
-# random.shuffle(image_ids)
-# partition_size = len(image_ids) // num_clients
-# partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
-#
-# # 临时目录用于客户端注解
-# temp_dir = 'temp_client_ann'
-# os.makedirs(temp_dir, exist_ok=True)
-#
-# # 预计算客户端注解文件（在循环外加载COCO annotation）
-# client_ann_files = []
-# coco = COCO(cfg.data.train.ann_file)  # 只加载一次COCO annotation文件
-# for partition_id in range(num_clients):
-#     client_image_ids = partitions[partition_id]
-#     client_imgs = [img for img in coco.imgs.values() if img['id'] in client_image_ids]
-#     client_ann_ids = coco.getAnnIds(imgIds=client_image_ids)
-#     client_anns = [coco.anns[ann_id] for ann_id in client_ann_ids]
-#     client_coco = {
-#         'images': client_imgs,
-#         'annotations': client_anns,
-#         'categories': coco.dataset['categories'],
-#         'info': coco.dataset.get('info', {}),
-#         'licenses': coco.dataset.get('licenses', [])
-#     }
-#     temp_ann_file = os.path.join(temp_dir, f'client_{partition_id}_ann.json')
-#     with open(temp_ann_file, 'w') as f:
-#         json.dump(client_coco, f)
-#     client_ann_files.append(temp_ann_file)
-# del coco  # 释放COCO对象
-# gc.collect()
-
-# 预生成的客户端注解文件路径
-client_ann_files = [os.path.join('client_ann', f'client_{partition_id}_ann.json')
+# Pre-generated client annotation files
+client_ann_files = [os.path.join('../client_ann', f'client_{partition_id}_ann.json')
                     for partition_id in range(num_clients)]
 
-# Flower客户端类
+# Flower client class
 class FlowerClient(NumPyClient):
     def __init__(self, partition_id: int):
         self.partition_id = partition_id
@@ -92,7 +55,7 @@ class FlowerClient(NumPyClient):
         )
         self.ann_file = client_ann_files[partition_id]
         self.trainloader = None
-        print(f"客户端 {self.partition_id} 初始化，注解文件: {self.ann_file}")
+        logger.info(f"Client {self.partition_id} initialized, annotation file: {self.ann_file}")
 
     def freeze_parameters(self):
         for name, param in self.net.named_parameters():
@@ -111,16 +74,16 @@ class FlowerClient(NumPyClient):
         )
         try:
             client_dataset = build_from_cfg(client_cfg, DATASETS)
-            print(f"客户端 {self.partition_id} 加载数据集，图像数量: {len(client_dataset)}")
+            logger.info(f"Client {self.partition_id} loaded dataset, image count: {len(client_dataset)}")
             return client_dataset
         except Exception as e:
-            print(f"客户端 {self.partition_id} 加载数据集失败: {e}")
+            logger.error(f"Client {self.partition_id} failed to load dataset: {e}")
             raise
 
     def get_parameters(self, config) -> List[np.ndarray]:
         with torch.no_grad():
             params = [val.cpu().numpy() for _, val in self.net.state_dict().items()]
-        print(f"客户端 {self.partition_id} 返回 {len(params)} 个参数")
+        logger.info(f"Client {self.partition_id} returning {len(params)} parameters")
         return params
 
     def set_parameters(self, parameters: List[np.ndarray]):
@@ -129,9 +92,9 @@ class FlowerClient(NumPyClient):
         new_state_dict = OrderedDict({k: torch.tensor(v) for k, v in params_dict})
         try:
             self.net.load_state_dict(new_state_dict, strict=True)
-            print(f"客户端 {self.partition_id} 参数设置完成")
+            logger.info(f"Client {self.partition_id} parameters set successfully")
         except Exception as e:
-            print(f"客户端 {self.partition_id} 参数设置失败: {e}")
+            logger.error(f"Client {self.partition_id} failed to set parameters: {e}")
             raise
 
     def fit(self, parameters: List[np.ndarray], config) -> Tuple[List[np.ndarray], int, dict]:
@@ -142,7 +105,7 @@ class FlowerClient(NumPyClient):
 
         self.trainloader = self.load_data()
         server_round = config.get("server_round", 1)
-        print(f"客户端 {self.partition_id} 训练（轮次 {server_round}）...")
+        logger.info(f"Client {self.partition_id} training (round {server_round})...")
 
         self.freeze_parameters()
         original_load_from = cfg.get('load_from', None)
@@ -158,9 +121,9 @@ class FlowerClient(NumPyClient):
                 timestamp=time.strftime('%Y%m%d_%H%M%S', time.localtime()),
                 meta={'seed': seed}
             )
-            print(f"客户端 {self.partition_id} 训练完成")
+            logger.info(f"Client {self.partition_id} training completed")
         except Exception as e:
-            print(f"客户端 {self.partition_id} 训练失败: {e}")
+            logger.error(f"Client {self.partition_id} training failed: {e}")
             raise
         finally:
             cfg.load_from = original_load_from
@@ -173,21 +136,21 @@ class FlowerClient(NumPyClient):
 
         return params, num_examples, {}
 
-# 客户端工厂函数
+# Client factory function
 def client_fn(context: Context) -> Client:
     partition_id = context.node_config["partition-id"]
     return FlowerClient(partition_id).to_client()
 
-# 创建ClientApp
+# Create ClientApp
 client = ClientApp(client_fn=client_fn)
 
-# 权重平均用于指标
+# Weighted average for metrics
 def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     accuracies = [num_examples * m["accuracy"] for num_examples, m in metrics]
     examples = [num_examples for num_examples, _ in metrics]
     return {"accuracy": sum(accuracies) / sum(examples) if sum(examples) > 0 else 0.0}
 
-# 自定义FedAvg策略
+# Custom FedAvg strategy
 class CustomFedAvg(FedAvg):
     def __init__(self, *args, **kwargs):
         self.model = build_detector(
@@ -202,12 +165,12 @@ class CustomFedAvg(FedAvg):
                 checkpoint = torch.load(cfg.load_from)
                 state_dict = checkpoint.get('state_dict', checkpoint)
                 self.model.load_state_dict(state_dict, strict=False)
-                print(f"服务器加载初始模型: {cfg.load_from}")
+                logger.info(f"Server loaded initial model: {cfg.load_from}")
             except Exception as e:
-                print(f"服务器加载初始模型失败: {e}")
+                logger.error(f"Server failed to load initial model: {e}")
                 raise
         else:
-            print("未指定cfg.load_from，使用随机初始化的模型")
+            logger.info("No cfg.load_from specified, using randomly initialized model")
             self.model.init_weights()
 
         try:
@@ -219,7 +182,7 @@ class CustomFedAvg(FedAvg):
             rounds = [int(f.split('_')[-1].split('.')[0]) for f in model_files]
             latest_round = max(rounds)
             latest_model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{latest_round}.pth")
-            print(f"加载最新的聚合模型: {latest_model_path}")
+            logger.info(f"Loading latest aggregated model: {latest_model_path}")
             checkpoint = torch.load(latest_model_path)
             state_dict = checkpoint.get('state_dict', checkpoint)
             self.model.load_state_dict(state_dict, strict=True)
@@ -239,9 +202,9 @@ class CustomFedAvg(FedAvg):
                 dist=False,
                 shuffle=False
             )
-            print("服务器端加载评估数据集完成")
+            logger.info("Server loaded evaluation dataset successfully")
         except Exception as e:
-            print(f"服务器端加载评估数据集失败: {e}")
+            logger.error(f"Server failed to load evaluation dataset: {e}")
             raise
 
     def configure_fit(self, server_round: int, parameters: Parameters, client_manager):
@@ -256,7 +219,7 @@ class CustomFedAvg(FedAvg):
             results: List[Tuple[flwr.server.client_proxy.ClientProxy, flwr.common.FitRes]],
             failures: List[BaseException],
     ) -> Tuple[Optional[Parameters], Dict[str, Scalar]]:
-        print(f"服务器轮次 {server_round}: 聚合 {len(results)} 个结果, {len(failures)} 个失败")
+        logger.info(f"Server round {server_round}: Aggregating {len(results)} results, {len(failures)} failures")
         aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
         if aggregated_parameters is not None:
             try:
@@ -269,19 +232,20 @@ class CustomFedAvg(FedAvg):
                 actual_round = self.start_round + server_round - 1
                 model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
                 torch.save(self.model.state_dict(), model_path)
-                print(f"保存聚合模型到 {model_path}")
+                logger.info(f"Saved aggregated model to {model_path}")
 
-                # self.evaluate_aggregated_model()
+                self.evaluate_aggregated_model()
             except Exception as e:
-                print(f"聚合或评估模型失败: {e}")
+                logger.error(f"Aggregation or evaluation failed: {e}")
+                raise
         else:
-            print(f"轮次 {server_round} 没有聚合参数, 结果: {len(results)}, 失败: {len(failures)}")
+            logger.warning(f"Round {server_round} produced no aggregated parameters, results: {len(results)}, failures: {len(failures)}")
 
         gc.collect()
         return aggregated_parameters, metrics
 
     def evaluate_aggregated_model(self):
-        print("开始评估聚合模型...")
+        logger.info("Starting aggregated model evaluation...")
         self.model.eval()
         try:
             model = MMDataParallel(self.model, device_ids=[0])
@@ -290,18 +254,18 @@ class CustomFedAvg(FedAvg):
             preds = []
             gts = []
             for i, output in enumerate(outputs):
-                pred = torch.argmax(torch.tensor(output)).item()  # 需确认模型输出格式
-                gt = self.val_dataset[i]['ann_info']['labels'][0]  # 修正为单值
+                pred = torch.argmax(torch.tensor(output)).item()
+                gt = self.val_dataset[i]['ann_info']['labels'][0]
                 preds.append(pred)
                 gts.append(gt)
 
             accuracy = sum(1 for p, g in zip(preds, gts) if p == g) / len(gts)
-            print(f"聚合模型评估完成，准确率: {accuracy:.4f}")
+            logger.info(f"Aggregated model evaluation completed, accuracy: {accuracy:.4f}")
         except Exception as e:
-            print(f"评估聚合模型失败: {e}")
+            logger.error(f"Failed to evaluate aggregated model: {e}")
             raise
 
-# 服务器工厂函数
+# Server factory function
 def server_fn(context: Context) -> ServerAppComponents:
     strategy = CustomFedAvg(
         fraction_fit=1.0,
@@ -318,14 +282,174 @@ def server_fn(context: Context) -> ServerAppComponents:
     config = ServerConfig(num_rounds=num_rounds)
     return ServerAppComponents(strategy=strategy, config=config)
 
-# 客户端资源
+# Client resources
 backend_config = {"client_resources": {"num_cpus": 1.0, "num_gpus": 0.0}}
 if torch.cuda.is_available():
     backend_config["client_resources"] = {"num_cpus": 1.0, "num_gpus": 1.0}
 
-# 运行模拟
+# Configuration updates
+cfg.seed = 42
+cfg.work_dir = '../work_dirs/symformer_retinanet_p2t_cls_flower'
+cfg.num_clients = 3
+cfg.num_rounds = 1
+cfg.max_epochs = 1
+cfg.log_level = 'INFO'
+
+cfg.model = dict(
+    type='RetinaNetClsAtt',
+    backbone=dict(
+        type='p2t_small',
+        depth=50,
+        num_stages=4,
+        out_indices=(0, 1, 2, 3),
+        style='pytorch',
+        pretrained='../pretrained/p2t_small.pth',
+        init_cfg=dict(type='Pretrained', checkpoint='../pretrained/p2t_small.pth')),
+    neck=dict(
+        type='FPN',
+        in_channels=[64, 128, 320, 512],
+        out_channels=256,
+        start_level=1,
+        add_extra_convs='on_input',
+        num_outs=5),
+    bbox_head=dict(
+        type='RetinaGuideAttHead',
+        num_classes=2,
+        num_query=500,
+        dims_radio=1,
+        in_channels=256,
+        stacked_convs=4,
+        feat_channels=256,
+        anchor_generator=dict(
+            type='AnchorGenerator',
+            octave_base_scale=4,
+            scales_per_octave=3,
+            ratios=[0.5, 1.0, 2.0],
+            strides=[8, 16, 32, 64, 128]),
+        bbox_coder=dict(
+            type='DeltaXYWHBBoxCoder',
+            target_means=[0.0, 0.0, 0.0, 0.0],
+            target_stds=[1.0, 1.0, 1.0, 1.0]),
+        transformer=dict(
+            type='DeformableDetrTransformerConv',
+            encoder=dict(
+                type='DetrTransformerEncoder',
+                num_layers=1,
+                transformerlayers=dict(
+                    type='SymDetrTransformerEncoderLayer',
+                    attn_cfgs=dict(
+                        type='SymMultiScaleDeformableAttention',
+                        embed_dims=256,
+                        num_levels=1),
+                    feedforward_channels=1024,
+                    ffn_dropout=0.1,
+                    operation_order=('self_attn', 'norm', 'ffn', 'norm')))),
+        positional_encoding=dict(
+            type='GuidePositionalEncoding',
+            num_feats=128,
+            normalize=True,
+            offset=-0.5,
+            left=True),
+        loss_cls=dict(
+            type='FocalLoss',
+            use_sigmoid=True,
+            gamma=2.0,
+            alpha=0.25,
+            loss_weight=1.0),
+        loss_bbox=dict(type='L1Loss', loss_weight=1.0)),
+    classifier=dict(input_dim=512),
+    train_cfg=dict(
+        assigner=dict(
+            type='MaxIoUAssigner',
+            pos_iou_thr=0.5,
+            neg_iou_thr=0.4,
+            min_pos_iou=0,
+            ignore_iof_thr=-1),
+        allowed_border=-1,
+        pos_weight=-1,
+        debug=False,
+        stage='resnet_classify'),
+    test_cfg=dict(
+        nms_pre=1000,
+        min_bbox_size=0,
+        score_thr=0.05,
+        nms=dict(type='nms', iou_threshold=0.5),
+        max_per_img=100))
+
+cfg.dataset_type = 'COCODataset'
+cfg.data_root = '../data/TBX11K/'
+cfg.classes = ('ActiveTuberculosis', 'ObsoletePulmonaryTuberculosis')
+cfg.img_norm_cfg = dict(
+    mean=[123.675, 116.28, 103.53], std=[58.395, 57.12, 57.375], to_rgb=True)
+
+cfg.train_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(type='Resize', img_scale=(512, 512), keep_ratio=True),
+    dict(type='RandomFlip', flip_ratio=0.5),
+    dict(type='Normalize', **cfg.img_norm_cfg),
+    dict(type='Pad', size_divisor=32),
+    dict(type='DefaultFormatBundle'),
+    dict(type='Collect', keys=['img', 'gt_classes', 'gt_bboxes', 'gt_labels'])
+]
+
+# Updated test pipeline to ensure consistent image dimensions
+cfg.test_pipeline = [
+    dict(type='LoadImageFromFile'),
+    dict(
+        type='MultiScaleFlipAug',
+        img_scale=(512, 512),
+        flip=False,
+        transforms=[
+            dict(type='Resize', img_scale=(512, 512), keep_ratio=False),
+            dict(type='Normalize', **cfg.img_norm_cfg),
+            dict(type='Pad', size=(512, 512)),
+            dict(type='ImageToTensor', keys=['img']),
+            dict(type='Collect', keys=['img'], meta_keys=['img_shape', 'scale_factor', 'pad_shape', 'filename', 'ori_shape'])
+        ])
+]
+
+cfg.data = dict(
+    samples_per_gpu=8,
+    workers_per_gpu=4,
+    train=dict(
+        type='CocoDataset',
+        ann_file='../data/TBX11K/annotations/json/all_trainval_without_extra.json',
+        img_prefix='../data/fed/clients/',
+        pipeline=cfg.train_pipeline,
+        filter_empty_gt=False,
+        classes=cfg.classes),
+    val=dict(
+        type='CocoClassificationDataset',
+        ann_file='../data/g/g_val/val_dataset.json',
+        img_prefix='../data/g/g_val/img/',
+        pipeline=cfg.test_pipeline,
+        classes=('healthy', 'sick_non_tb', 'tb')))
+
+cfg.evaluation = dict(interval=1, metric='bbox')
+cfg.optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
+cfg.optimizer_config = dict(grad_clip=None)
+cfg.lr_config = dict(
+    policy='step',
+    warmup='linear',
+    warmup_iters=500,
+    warmup_ratio=0.001,
+    step=[3, 4])
+cfg.runner = dict(type='EpochBasedRunner', max_epochs=cfg.max_epochs)
+cfg.checkpoint_config = dict(interval=1)
+cfg.log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])
+cfg.custom_hooks = [dict(type='NumClassCheckHook')]
+cfg.dist_params = dict(backend='nccl')
+cfg.log_level = 'INFO'
+cfg.load_from = '../work_dirs/symformer_retinanet_p2t/latest.pth'
+cfg.resume_from = None
+cfg.workflow = [('train', 1)]
+cfg.gpu_ids = [0]
+cfg.find_unused_parameters = True
+
+# Run simulation
 if __name__ == "__main__":
-    print("开始模拟...")
+    logger.info("Starting simulation...")
     run_simulation(
         server_app=ServerApp(server_fn=server_fn),
         client_app=client,
