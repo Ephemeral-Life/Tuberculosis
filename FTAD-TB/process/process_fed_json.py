@@ -5,6 +5,7 @@ from tqdm import tqdm
 def generate_client_annotations(clients_root_dir, all_ann_file, client_sizes):
     """
     为每个客户端生成标注JSON文件，基于总的标注文件。
+    修改点：匹配逻辑改为仅根据文件名（而非完整路径）匹配标注信息
 
     Args:
         clients_root_dir (str): 包含客户端文件夹（0, 1, ..., n）的根目录。
@@ -19,7 +20,8 @@ def generate_client_annotations(clients_root_dir, all_ann_file, client_sizes):
         info = all_data.get('info', [])
         licenses = all_data.get('licenses', [])
         categories = all_data.get('categories', [])
-        images_dict = {img['file_name']: img for img in all_data['images']}
+        # 修改点1：使用文件名（而非完整路径）作为字典键
+        images_dict = {os.path.basename(img['file_name']): img for img in all_data['images']}
         annotations_dict = {}
         for ann in all_data.get('annotations', []):
             image_id = ann['image_id']
@@ -58,11 +60,12 @@ def generate_client_annotations(clients_root_dir, all_ann_file, client_sizes):
 
             # 匹配图像与标注
             for image in tqdm(images, desc=f"客户端 {client_id} - {category}"):
-                # 使用 '/' 来匹配JSON文件中的格式（例如 "tb/tb0006.png"）
-                file_name = category + '/' + image
-                if file_name in images_dict:
-                    img_info = images_dict[file_name].copy()
-                    img_info['file_name'] = client_id + '/' + category + '/' + image
+                # 修改点2：仅使用文件名部分匹配
+                base_name = os.path.basename(image)
+                if base_name in images_dict:
+                    img_info = images_dict[base_name].copy()
+                    # 修改点3：构造客户端专属路径（使用跨平台路径分隔符）
+                    img_info['file_name'] = os.path.join(client_id, category, image).replace('\\', '/')
                     img_info['width'], img_info['height'] = size
                     client_images.append(img_info)
                     # 检查并添加相关的annotations信息
@@ -70,7 +73,7 @@ def generate_client_annotations(clients_root_dir, all_ann_file, client_sizes):
                     if image_id in annotations_dict:
                         client_annotations.extend(annotations_dict[image_id])
                 else:
-                    print(f"警告: 图像 {file_name} 在 {all_ann_file} 中未找到")
+                    print(f"警告: 图像 {base_name} 在 {all_ann_file} 中未找到")
 
         # 保存客户端的标注文件
         if client_images:
@@ -81,6 +84,7 @@ def generate_client_annotations(clients_root_dir, all_ann_file, client_sizes):
                 'images': client_images,
                 'annotations': client_annotations
             }
+            os.makedirs(os.path.dirname(client_ann_file), exist_ok=True)
             with open(client_ann_file, 'w', encoding='utf-8') as f:
                 json.dump(client_data, f, ensure_ascii=False, indent=4)
             print(f"保存了 {len(client_images)} 张图像到 {client_ann_file}")
@@ -90,11 +94,8 @@ def generate_client_annotations(clients_root_dir, all_ann_file, client_sizes):
 def main():
     # 配置（根据需要调整）
     clients_root_dir = '../../data/fed/clients'
-    all_ann_file = '../../data/TBX11K/annotations/json/all_trainval_without_extra.json'
+    all_ann_file = '../../data/TBX11K/annotations/json/all_trainval_without_shenzhen_val.json'
     client_sizes = {
-        # 0: (512, 512),
-        # 1: (512, 512),
-        # 2: (512, 512),
         0: (512, 512),
         1: (256, 256),
         2: (128, 128),

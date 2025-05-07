@@ -7,9 +7,9 @@ import time
 # root = '../../data/Pakistan/'
 # root = '../../data/ChinaSet_AllFiles/'
 # root = '../../data/mc+shenzhen/'
-# root = '../../data/test/'
+root = '../../data/test/'
 # root = '../../data/lowres_mc+shenzhen/'
-root = '../../data/g/g_test/'
+# root = '../../data/g/g_test/'
 
 img_folder = root + 'img'  # 图片文件夹路径
 output_json = root + 'test_dataset.json'  # 输出的JSON文件

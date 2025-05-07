@@ -36,6 +36,9 @@ cfg = Config.fromfile('FTAD-TB/configs/symformer/symformer_retinanet_p2t_cls_fpn
 cfg.gpu_ids = [0]
 num_clients = cfg.num_clients
 
+# 服务器端学习率
+server_lr = 0.005  # 范围 0.0005-0.005，默认 0.001
+
 # 注册数据集
 DATASETS = Registry('dataset')
 PIPELINES = Registry('pipeline')
@@ -200,6 +203,7 @@ class CustomFedAvg(FedAvg):
         )
         self.start_round = 1
         self.client_stats = {}  # 存储客户端统计信息
+        self.momentum = None  # 服务器动量向量，初始为None，稍后初始化为全零
 
         # 加载初始模型
         if cfg.get('load_from', None):
@@ -264,68 +268,134 @@ class CustomFedAvg(FedAvg):
             results: List[Tuple[flwr.server.client_proxy.ClientProxy, flwr.common.FitRes]],
             failures: List[BaseException],
     ) -> Tuple[Optional[Parameters], Dict[str, Scalar]]:
-        """聚合客户端训练结果并处理统计信息"""
         print(f"服务器轮次 {server_round}: 聚合 {len(results)} 个结果, {len(failures)} 个失败")
-        aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
-        if aggregated_parameters is not None:
-            try:
-                # 更新服务器模型参数
-                aggregated_ndarrays = parameters_to_ndarrays(aggregated_parameters)
-                params_dict = zip(self.model.state_dict().keys(),
-                                  [torch.from_numpy(np.copy(p)) for p in aggregated_ndarrays])
-                state_dict = OrderedDict({k: v for k, v in params_dict})
-                self.model.load_state_dict(state_dict, strict=True)
+        if not results:
+            print("没有客户端结果可供聚合")
+            return None, {}
 
-                # 保存聚合模型
-                actual_round = self.start_round + server_round - 1
-                model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
-                torch.save(self.model.state_dict(), model_path)
-                print(f"保存聚合模型到 {model_path}")
+        # 获取当前全局模型参数
+        global_state_dict = self.model.state_dict()
+        global_params = list(global_state_dict.values())
 
-                # 处理并打印客户端统计信息
-                for client_proxy, fit_res in results:
-                    client_id = client_proxy.cid
-                    tb_ratio = fit_res.metrics.get("tb_ratio", 0.0)
-                    image_width = fit_res.metrics.get("image_width", 0)
-                    image_height = fit_res.metrics.get("image_height", 0)
-                    print(f"\n服务器信息：客户端 {client_id}: TB图像占比 {tb_ratio:.4f}, 图像尺寸 ({image_width}, {image_height})\n")
-                    # 存储统计信息以供后续使用
-                    self.client_stats[client_id] = {
-                        "tb_ratio": tb_ratio,
-                        "image_size": (image_width, image_height)
-                    }
+        # 存储客户端参数差异和统计信息
+        client_diffs = []
+        client_stats = []
+        total_weighted_samples = 0.0
+        total_weighted_tb = 0.0
+        total_samples = 0
 
-                # 可选：评估聚合模型
-                # self.evaluate_aggregated_model()
-            except Exception as e:
-                print(f"聚合或评估模型失败: {e}")
-        else:
-            print(f"轮次 {server_round} 没有聚合参数, 结果: {len(results)}, 失败: {len(failures)}")
+        for client_proxy, fit_res in results:
+            client_id = client_proxy.cid
+            client_params = parameters_to_ndarrays(fit_res.parameters)
+            # 确保客户端参数与全局参数对齐
+            if len(client_params) != len(global_params):
+                raise ValueError(
+                    f"客户端 {client_id} 参数数量不匹配: {len(client_params)} vs {len(global_params)}")
+            diff = []
+            for client_p, global_p in zip(client_params, global_params):
+                client_tensor = torch.from_numpy(client_p).to('cpu')
+                if client_tensor.shape != global_p.shape:
+                    raise ValueError(
+                        f"客户端 {client_id} 参数形状不匹配: {client_tensor.shape} vs {global_p.shape}")
+                diff.append(client_tensor - global_p)
+            client_diffs.append(diff)
+
+            # 收集客户端统计信息
+            num_examples = fit_res.num_examples
+            tb_ratio = fit_res.metrics.get("tb_ratio", 0.0)
+            image_width = fit_res.metrics.get("image_width", 0)
+            image_height = fit_res.metrics.get("image_height", 0)
+
+            # 根据图像尺寸映射质量权重
+            if image_width >= 1024 and image_height >= 1024:
+                quality_weight = 1.2  # 大尺寸
+            elif image_width >= 512 and image_height >= 512:
+                quality_weight = 1.1  # 中尺寸
+            else:
+                quality_weight = 1  # 小尺寸
+
+            # 计算加权样本数
+            weighted_samples = num_examples * quality_weight
+            total_weighted_samples += weighted_samples
+            total_samples += num_examples
+            total_weighted_tb += tb_ratio * num_examples
+
+            client_stats.append({
+                "num_examples": num_examples,
+                "quality_weight": quality_weight,
+                "weighted_samples": weighted_samples,
+                "tb_ratio": tb_ratio
+            })
+
+        # 计算全局TB占比
+        global_tb_ratio = total_weighted_tb / total_samples if total_samples > 0 else 0.0
+        print(f"全局病灶占比: {global_tb_ratio:.4f}")
+
+        # 计算惩罚系数
+        lambda_0 = 1.0  # 基础惩罚强度，可调
+        lambda_penalty = lambda_0 * (1 - global_tb_ratio)
+        print(f"惩罚系数 λ: {lambda_penalty:.4f}")
+
+        # 计算初始客户端权重
+        initial_weights = [stats["weighted_samples"] / total_weighted_samples for stats in client_stats]
+
+        # 计算客户端偏差（参数差异的欧几里得范数）
+        client_deviations = []
+        for diff in client_diffs:
+            deviation = sum(torch.norm(d).item() for d in diff)
+            client_deviations.append(deviation)
+
+        # 应用指数惩罚并归一化权重
+        adjusted_weights = []
+        for initial_weight, deviation in zip(initial_weights, client_deviations):
+            penalty = math.exp(-lambda_penalty * deviation)
+            adjusted_weight = initial_weight * penalty
+            adjusted_weights.append(adjusted_weight)
+
+        # 归一化最终权重
+        total_adjusted_weight = sum(adjusted_weights)
+        final_weights = [w / total_adjusted_weight for w in adjusted_weights]
+
+        # 计算本轮聚合更新向量
+        aggregated_diff = [torch.zeros_like(p) for p in global_params]
+        for diff, weight in zip(client_diffs, final_weights):
+            for i, d in enumerate(diff):
+                aggregated_diff[i] += weight * d
+
+        # 自适应调整动量系数
+        base_momentum = 0.8  # 基础动量系数，范围 0.8-0.99
+        momentum_factor = 0.1  # 动量调整因子，范围 0.1-0.5
+        momentum_coefficient = base_momentum + momentum_factor * global_tb_ratio
+        momentum_coefficient = min(max(momentum_coefficient, 0.8), 0.99)  # 限制在 0.8-0.99 之间
+        print(f"本轮动量系数: {momentum_coefficient:.4f}")
+
+        # 初始化或更新服务器动量向量
+        if self.momentum is None:
+            self.momentum = [torch.zeros_like(p) for p in global_params]
+        self.momentum = [
+            momentum_coefficient * m + (1 - momentum_coefficient) * agg_d
+            for m, agg_d in zip(self.momentum, aggregated_diff)
+        ]
+
+        # 使用动量更新全局模型参数
+        new_global_params = [global_p + server_lr * m for global_p, m in zip(global_params, self.momentum)]
+
+        # 更新全局模型的状态字典
+        for key, param in zip(global_state_dict.keys(), new_global_params):
+            global_state_dict[key] = param
+        self.model.load_state_dict(global_state_dict)
+
+        # 保存聚合后的模型参数
+        actual_round = self.start_round + server_round - 1
+        model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
+        torch.save(self.model.state_dict(), model_path)
+        print(f"保存聚合模型到 {model_path}")
+
+        # 更新下一轮的初始参数
+        self.initial_parameters = ndarrays_to_parameters([p.cpu().numpy() for p in new_global_params])
 
         gc.collect()
-        return aggregated_parameters, metrics
-
-    def evaluate_aggregated_model(self):
-        """评估聚合模型（当前未启用）"""
-        print("开始评估聚合模型...")
-        self.model.eval()
-        try:
-            model = MMDataParallel(self.model, device_ids=[0])
-            outputs = single_gpu_test(model, self.val_dataloader)
-
-            preds = []
-            gts = []
-            for i, output in enumerate(outputs):
-                pred = torch.argmax(torch.tensor(output)).item()
-                gt = self.val_dataset[i]['ann_info']['labels'][0]
-                preds.append(pred)
-                gts.append(gt)
-
-            accuracy = sum(1 for p, g in zip(preds, gts) if p == g) / len(gts)
-            print(f"聚合模型评估完成，准确率: {accuracy:.4f}")
-        except Exception as e:
-            print(f"评估聚合模型失败: {e}")
-            raise
+        return self.initial_parameters, {}
 
 
 # 服务器工厂函数
@@ -333,9 +403,9 @@ def server_fn(context: Context) -> ServerAppComponents:
     strategy = CustomFedAvg(
         fraction_fit=1.0,
         fraction_evaluate=0.5,
-        min_fit_clients=math.ceil(3),
-        min_evaluate_clients=math.ceil(3),
-        min_available_clients=math.ceil(3),
+        min_fit_clients=math.ceil(num_clients),
+        min_evaluate_clients=math.ceil(num_clients),
+        min_available_clients=math.ceil(num_clients),
         evaluate_metrics_aggregation_fn=weighted_average,
     )
     start_round = strategy.start_round if hasattr(strategy, 'start_round') else 1
