@@ -1,8 +1,8 @@
 seed = 42
 work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower'
 num_clients = 3
-num_rounds = 3
-max_epochs = 1
+num_rounds = 100
+max_epochs = 5
 log_level = 'WARNING'
 model = dict(
     type='RetinaNetClsAtt',
