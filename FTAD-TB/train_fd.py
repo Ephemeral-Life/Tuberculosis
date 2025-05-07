@@ -35,9 +35,13 @@ logging.basicConfig(level=logging.WARNING)
 cfg = Config.fromfile('FTAD-TB/configs/symformer/symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
 cfg.gpu_ids = [0]
 num_clients = cfg.num_clients
+total_rounds = cfg.num_rounds
 
-# 服务器端学习率
-server_lr = 0.005  # 范围 0.0005-0.005，默认 0.001
+lambda_0 = 0.1
+momentum = 0.9
+initial_lr = 0.001
+decay_rate = 0.1
+momentum_coefficient = 0.9
 
 # 注册数据集
 DATASETS = Registry('dataset')
@@ -332,7 +336,9 @@ class CustomFedAvg(FedAvg):
         print(f"全局病灶占比: {global_tb_ratio:.4f}")
 
         # 计算惩罚系数
-        lambda_0 = 1.0  # 基础惩罚强度，可调
+        # lambda_0 = 1.0  # 基础惩罚强度，可调initial_lambda_0
+        initial_lambda_0 = 0.05
+        lambda_0 = initial_lambda_0 * (1 + server_round / total_rounds)
         lambda_penalty = lambda_0 * (1 - global_tb_ratio)
         print(f"惩罚系数 λ: {lambda_penalty:.4f}")
 
@@ -342,13 +348,16 @@ class CustomFedAvg(FedAvg):
         # 计算客户端偏差（参数差异的欧几里得范数）
         client_deviations = []
         for diff in client_diffs:
-            deviation = sum(torch.norm(d).item() for d in diff)
+            # deviation = sum(torch.norm(d).item() for d in diff)
+            deviation = sum(
+                torch.norm(d).item() / (torch.norm(global_p).item() + 1e-8) for d, global_p in zip(diff, global_params))
             client_deviations.append(deviation)
 
         # 应用指数惩罚并归一化权重
         adjusted_weights = []
         for initial_weight, deviation in zip(initial_weights, client_deviations):
-            penalty = math.exp(-lambda_penalty * deviation)
+            # penalty = math.exp(-lambda_penalty * deviation)
+            penalty = 1 / (1 + lambda_penalty * deviation)
             adjusted_weight = initial_weight * penalty
             adjusted_weights.append(adjusted_weight)
 
@@ -365,8 +374,9 @@ class CustomFedAvg(FedAvg):
         # 自适应调整动量系数
         base_momentum = 0.8  # 基础动量系数，范围 0.8-0.99
         momentum_factor = 0.1  # 动量调整因子，范围 0.1-0.5
-        momentum_coefficient = base_momentum + momentum_factor * global_tb_ratio
-        momentum_coefficient = min(max(momentum_coefficient, 0.8), 0.99)  # 限制在 0.8-0.99 之间
+        # momentum_coefficient = base_momentum + momentum_factor * global_tb_ratio
+        # momentum_coefficient = min(max(momentum_coefficient, 0.8), 0.99)  # 限制在 0.8-0.99 之间
+        momentum_coefficient = 0.9 * (1 - 0.5 ** (server_round / 10))
         print(f"本轮动量系数: {momentum_coefficient:.4f}")
 
         # 初始化或更新服务器动量向量
@@ -377,6 +387,9 @@ class CustomFedAvg(FedAvg):
             for m, agg_d in zip(self.momentum, aggregated_diff)
         ]
 
+        # 服务器端学习率
+        # server_lr = 0.005  # 范围 0.0005-0.005，默认 0.001
+        server_lr = initial_lr * (1 - decay_rate) ** server_round
         # 使用动量更新全局模型参数
         new_global_params = [global_p + server_lr * m for global_p, m in zip(global_params, self.momentum)]
 

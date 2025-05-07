@@ -132,15 +132,9 @@ data = dict(
         pipeline=test_pipeline,
         classes=('healthy', 'sick_non_tb', 'tb')))
 evaluation = dict(interval=1, metric='bbox')  # 每轮评估
-optimizer = dict(type='SGD', lr=0.005, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
+optimizer = dict(type='SGD', lr=0.001, momentum=0.9, weight_decay=0.0001, stage='resnet_finetune')
 optimizer_config = dict(grad_clip=None)
-lr_config = dict(
-    policy='step',
-    warmup=None,
-    # warmup='linear',
-    # warmup_iters=500,
-    # warmup_ratio=0.001,
-    step=[3, 4])
+lr_config = dict(policy='fixed')
 runner = dict(type='EpochBasedRunner', max_epochs=max_epochs)
 checkpoint_config = dict(interval=1)  # 每轮保存
 log_config = dict(interval=50, hooks=[dict(type='TextLoggerHook')])  # 减小日志间隔
