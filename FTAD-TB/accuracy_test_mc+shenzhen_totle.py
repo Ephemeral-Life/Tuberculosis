@@ -31,13 +31,13 @@ def calculate_accuracy(actual_labels, predictions):
     false_normal_to_other = false_other_to_normal = 0
     total = len(actual_labels)
     for a, p in zip(actual_labels, predictions):
-        if a == "normal" and p == 0:
+        if a == "0" and p == 0:
             correct_normal += 1
-        elif a == "normal" and p == 1:
+        elif a == "0" and p == 1:
             false_normal_to_other += 1
-        elif a != "normal" and p == 1:
+        elif a != "0" and p == 1:
             correct_other += 1
-        elif a != "normal" and p == 0:
+        elif a != "0" and p == 0:
             false_other_to_normal += 1
     accuracy = (correct_normal + correct_other) / total * 100 if total > 0 else 0.0
     return correct_normal, correct_other, false_normal_to_other, false_other_to_normal, accuracy
