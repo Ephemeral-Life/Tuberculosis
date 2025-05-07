@@ -115,7 +115,7 @@ data = dict(
     workers_per_gpu=4,
     train=dict(
         type='CocoDataset',
-        ann_file='data/TBX11K/annotations/json/all_trainval2.json',
+        ann_file='data/TBX11K/annotations/json/all_trainval_without_shenzhen_val.json',
         img_prefix='data/TBX11K/imgs/',
         pipeline=train_pipeline,
         filter_empty_gt=False,
@@ -135,7 +135,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=0.001,
     step=[8, 11])
-runner = dict(type='EpochBasedRunner', max_epochs=12)
+runner = dict(type='EpochBasedRunner', max_epochs=36)
 checkpoint_config = dict(interval=6)
 log_config = dict(interval=150, hooks=[dict(type='TextLoggerHook')])
 custom_hooks = [dict(type='NumClassCheckHook')]
