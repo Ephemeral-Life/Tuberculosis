@@ -51,35 +51,35 @@ random.shuffle(image_ids)
 partition_size = len(image_ids) // num_clients
 partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
 
-# 临时目录用于客户端注解
-temp_dir = 'temp_client_ann'
-os.makedirs(temp_dir, exist_ok=True)
-
-# 预计算客户端注解文件（在循环外加载COCO annotation）
-client_ann_files = []
-coco = COCO(cfg.data.train.ann_file)  # 只加载一次COCO annotation文件
-for partition_id in range(num_clients):
-    client_image_ids = partitions[partition_id]
-    client_imgs = [img for img in coco.imgs.values() if img['id'] in client_image_ids]
-    client_ann_ids = coco.getAnnIds(imgIds=client_image_ids)
-    client_anns = [coco.anns[ann_id] for ann_id in client_ann_ids]
-    client_coco = {
-        'images': client_imgs,
-        'annotations': client_anns,
-        'categories': coco.dataset['categories'],
-        'info': coco.dataset.get('info', {}),
-        'licenses': coco.dataset.get('licenses', [])
-    }
-    temp_ann_file = os.path.join(temp_dir, f'client_{partition_id}_ann.json')
-    with open(temp_ann_file, 'w') as f:
-        json.dump(client_coco, f)
-    client_ann_files.append(temp_ann_file)
-del coco  # 释放COCO对象
-gc.collect()
+# # 临时目录用于客户端注解
+# temp_dir = 'temp_client_ann'
+# os.makedirs(temp_dir, exist_ok=True)
+#
+# # 预计算客户端注解文件（在循环外加载COCO annotation）
+# client_ann_files = []
+# coco = COCO(cfg.data.train.ann_file)  # 只加载一次COCO annotation文件
+# for partition_id in range(num_clients):
+#     client_image_ids = partitions[partition_id]
+#     client_imgs = [img for img in coco.imgs.values() if img['id'] in client_image_ids]
+#     client_ann_ids = coco.getAnnIds(imgIds=client_image_ids)
+#     client_anns = [coco.anns[ann_id] for ann_id in client_ann_ids]
+#     client_coco = {
+#         'images': client_imgs,
+#         'annotations': client_anns,
+#         'categories': coco.dataset['categories'],
+#         'info': coco.dataset.get('info', {}),
+#         'licenses': coco.dataset.get('licenses', [])
+#     }
+#     temp_ann_file = os.path.join(temp_dir, f'client_{partition_id}_ann.json')
+#     with open(temp_ann_file, 'w') as f:
+#         json.dump(client_coco, f)
+#     client_ann_files.append(temp_ann_file)
+# del coco  # 释放COCO对象
+# gc.collect()
 
 # 预生成的客户端注解文件路径
-# client_ann_files = [os.path.join('client_ann', f'client_{partition_id}_ann.json')
-#                     for partition_id in range(num_clients)]
+client_ann_files = [os.path.join('client_ann', f'client_{partition_id}_ann.json')
+                    for partition_id in range(num_clients)]
 
 # Flower客户端类
 class FlowerClient(NumPyClient):
