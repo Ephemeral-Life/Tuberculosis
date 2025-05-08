@@ -56,7 +56,7 @@ def main():
 
     # 写入表头
     with open(summary_file, 'w', encoding='utf-8') as sf:
-        sf.write('round\ttotal\tcorrect_normal\tcorrect_other\tfalse_normal_to_other\tfalse_other_to_normal\taccuracy(%)\n')
+        sf.write('轮次\t样本数\t阴性正确数量\t阳性正确数量\t阴性误判为阳性\t阳性误判为阴性\t准确率(%)\n')
 
     # 收集并排序所有聚合模型
     # pattern = os.path.join(pth_dir, 'epoch_*.pth')
