@@ -33,16 +33,16 @@ def calculate_accuracy(actual_labels, predictions):
 
     for actual, predicted in zip(actual_labels, predictions):
         # 实际标签为 normal，预测为 normal
-        if actual == "normal" and predicted == 0:
+        if actual == "0" and predicted == 0:
             correct_normal += 1
         # 实际标签为 normal，预测为其他
-        elif actual == "normal" and predicted == 1:
+        elif actual == "0" and predicted == 1:
             false_normal_to_other += 1
         # 实际标签为其他，预测为 1（其他）
-        elif actual != "normal" and predicted == 1:
+        elif actual != "0" and predicted == 1:
             correct_other += 1
         # 实际标签为其他，预测为 normal
-        elif actual != "normal" and predicted == 0:
+        elif actual != "0" and predicted == 0:
             false_other_to_normal += 1
 
     # 计算准确率
@@ -69,8 +69,8 @@ def print_results(correct_normal, correct_other, false_normal_to_other, false_ot
 # 修改后的主函数
 def main():
     # 路径设置
-    data_folder = "../data/mc+shenzhen/annotations"  # 实际标签的文件夹路径
-    prediction_file = "../work_dirs/symformer_retinanet_p2t_cls_flower/result/cls_result.txt"  # 模型预测结果文件路径
+    data_folder = "../data/test/annotations"  # 实际标签的文件夹路径
+    prediction_file = "../work_dirs/symformer_retinanet_p2t_cls/result/cls_result.txt"  # 模型预测结果文件路径
     # prediction_file = "../work_dirs/symformer_retinanet_p2t_cls_flower/result/cls_result_round_10.txt"  # 模型预测结果文件路径
 
     # 读取数据
