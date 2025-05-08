@@ -37,7 +37,7 @@ cfg.gpu_ids = [0]
 num_clients = cfg.num_clients
 total_rounds = cfg.num_rounds
 
-lambda_0 = 0.1
+lambda_0 = 0.05
 momentum = 0.9
 initial_lr = 0.001
 decay_rate = 0.1
@@ -107,6 +107,9 @@ class FlowerClient(NumPyClient):
             classes=cfg.data.train.classes
         )
         try:
+            # 添加统一预处理
+            target_size = (512, 512)
+            client_cfg['pipeline'].append(dict(type='Resize', size=target_size))
             client_dataset = build_from_cfg(client_cfg, DATASETS)
             print(f"客户端 {self.partition_id} 加载数据集，图像数量: {len(client_dataset)}")
             return client_dataset
@@ -338,7 +341,9 @@ class CustomFedAvg(FedAvg):
         # 计算惩罚系数
         # lambda_0 = 1.0  # 基础惩罚强度，可调initial_lambda_0
         initial_lambda_0 = 0.05
-        lambda_0 = initial_lambda_0 * (1 + server_round / total_rounds)
+        # lambda_0 = initial_lambda_0 * (1 + server_round / total_rounds)
+        # lambda_penalty = lambda_0 * (1 - global_tb_ratio)
+        lambda_0 = initial_lambda_0  # 保持常数
         lambda_penalty = lambda_0 * (1 - global_tb_ratio)
         print(f"惩罚系数 λ: {lambda_penalty:.4f}")
 
