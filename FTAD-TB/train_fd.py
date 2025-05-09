@@ -39,8 +39,8 @@ total_rounds = cfg.num_rounds
 
 lambda_0 = 0.05
 momentum = 0.9
-initial_lr = 0.001
-decay_rate = 0.1
+initial_lr = 0.005
+decay_rate = 0.05
 momentum_coefficient = 0.9
 
 # 注册数据集
@@ -390,7 +390,7 @@ class CustomFedAvg(FedAvg):
         ]
 
         # 服务器端学习率
-        # server_lr = 0.005  # 范围 0.0005-0.005，默认 0.001
+        # server_lr = 0.005  # 范围 0.0005-0.005，默认 0.005
         server_lr = initial_lr * (1 - decay_rate) ** server_round
         # 使用动量更新全局模型参数
         new_global_params = [global_p + server_lr * m for global_p, m in zip(global_params, self.momentum)]
