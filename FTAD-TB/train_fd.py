@@ -107,9 +107,6 @@ class FlowerClient(NumPyClient):
             classes=cfg.data.train.classes
         )
         try:
-            # 添加统一预处理
-            target_size = (512, 512)
-            client_cfg['pipeline'].append(dict(type='Resize', size=target_size))
             client_dataset = build_from_cfg(client_cfg, DATASETS)
             print(f"客户端 {self.partition_id} 加载数据集，图像数量: {len(client_dataset)}")
             return client_dataset
