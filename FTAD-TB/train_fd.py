@@ -40,7 +40,7 @@ total_rounds = cfg.num_rounds
 lambda_0 = 0.05
 momentum = 0.9
 initial_lr = 0.005
-decay_rate = 0.05
+decay_rate = 0.1
 momentum_coefficient = 0.9
 
 # 注册数据集
@@ -350,16 +350,13 @@ class CustomFedAvg(FedAvg):
         # 计算客户端偏差（参数差异的欧几里得范数）
         client_deviations = []
         for diff in client_diffs:
-            # deviation = sum(torch.norm(d).item() for d in diff)
-            deviation = sum(
-                torch.norm(d).item() / (torch.norm(global_p).item() + 1e-8) for d, global_p in zip(diff, global_params))
+            deviation = sum(torch.norm(d).item() for d in diff)
             client_deviations.append(deviation)
 
         # 应用指数惩罚并归一化权重
         adjusted_weights = []
         for initial_weight, deviation in zip(initial_weights, client_deviations):
-            # penalty = math.exp(-lambda_penalty * deviation)
-            penalty = 1 / (1 + lambda_penalty * deviation)
+            penalty = math.exp(-lambda_penalty * deviation)
             adjusted_weight = initial_weight * penalty
             adjusted_weights.append(adjusted_weight)
 
@@ -376,9 +373,7 @@ class CustomFedAvg(FedAvg):
         # 自适应调整动量系数
         base_momentum = 0.8  # 基础动量系数，范围 0.8-0.99
         momentum_factor = 0.1  # 动量调整因子，范围 0.1-0.5
-        # momentum_coefficient = base_momentum + momentum_factor * global_tb_ratio
-        # momentum_coefficient = min(max(momentum_coefficient, 0.8), 0.99)  # 限制在 0.8-0.99 之间
-        momentum_coefficient = 0.9 * (1 - 0.5 ** (server_round / 10))
+        momentum_coefficient = 0.5 + 0.4 * (1 - 0.5 ** (server_round / 10))
         print(f"本轮动量系数: {momentum_coefficient:.4f}")
 
         # 初始化或更新服务器动量向量
@@ -393,7 +388,8 @@ class CustomFedAvg(FedAvg):
         # server_lr = 0.005  # 范围 0.0005-0.005，默认 0.005
         server_lr = initial_lr * (1 - decay_rate) ** server_round
         # 使用动量更新全局模型参数
-        new_global_params = [global_p + server_lr * m for global_p, m in zip(global_params, self.momentum)]
+        # 在 aggregate_fit 中修改参数更新部分
+        new_global_params = [global_p - server_lr * m for global_p, m in zip(global_params, self.momentum)]
 
         # 更新全局模型的状态字典
         for key, param in zip(global_state_dict.keys(), new_global_params):
