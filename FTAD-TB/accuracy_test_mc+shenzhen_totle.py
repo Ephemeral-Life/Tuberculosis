@@ -9,8 +9,8 @@ import subprocess
 # —— 如果你的虚拟环境目录名不是 venv，请修改下面这行路径 —— #
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)  # 获取上一级目录
-VENV_PYTHON = os.path.join(PROJECT_ROOT, 'venv', 'Scripts', 'python.exe')
-
+# VENV_PYTHON = os.path.join(PROJECT_ROOT, 'venv', 'Scripts', 'python.exe')
+VENV_PYTHON = 'python3.8'
 # —— 准确度计算函数 —— #
 def read_actual_labels(folder_path):
     labels = []
