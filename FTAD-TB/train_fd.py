@@ -25,8 +25,10 @@ from coco_classification import CocoClassificationDataset
 import gc
 
 import warnings
+
 warnings.filterwarnings("ignore")
 import logging
+
 logging.basicConfig(level=logging.WARNING)
 
 # 加载配置
@@ -51,35 +53,10 @@ random.shuffle(image_ids)
 partition_size = len(image_ids) // num_clients
 partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
 
-# # 临时目录用于客户端注解
-# temp_dir = 'temp_client_ann'
-# os.makedirs(temp_dir, exist_ok=True)
-#
-# # 预计算客户端注解文件（在循环外加载COCO annotation）
-# client_ann_files = []
-# coco = COCO(cfg.data.train.ann_file)  # 只加载一次COCO annotation文件
-# for partition_id in range(num_clients):
-#     client_image_ids = partitions[partition_id]
-#     client_imgs = [img for img in coco.imgs.values() if img['id'] in client_image_ids]
-#     client_ann_ids = coco.getAnnIds(imgIds=client_image_ids)
-#     client_anns = [coco.anns[ann_id] for ann_id in client_ann_ids]
-#     client_coco = {
-#         'images': client_imgs,
-#         'annotations': client_anns,
-#         'categories': coco.dataset['categories'],
-#         'info': coco.dataset.get('info', {}),
-#         'licenses': coco.dataset.get('licenses', [])
-#     }
-#     temp_ann_file = os.path.join(temp_dir, f'client_{partition_id}_ann.json')
-#     with open(temp_ann_file, 'w') as f:
-#         json.dump(client_coco, f)
-#     client_ann_files.append(temp_ann_file)
-# del coco  # 释放COCO对象
-# gc.collect()
-
 # 预生成的客户端注解文件路径
 client_ann_files = [os.path.join('client_ann', f'client_{partition_id}_ann.json')
                     for partition_id in range(num_clients)]
+
 
 # Flower客户端类
 class FlowerClient(NumPyClient):
@@ -148,6 +125,11 @@ class FlowerClient(NumPyClient):
         original_load_from = cfg.get('load_from', None)
         cfg.load_from = None
 
+        # 获取全局参数（训练前的参数）
+        global_params = [torch.from_numpy(np.copy(p)).to('cuda' if torch.cuda.is_available() else 'cpu')
+                         for p in parameters]
+        global_state_dict = OrderedDict(zip(self.net.state_dict().keys(), global_params))
+
         try:
             train_detector(
                 self.net,
@@ -165,21 +147,43 @@ class FlowerClient(NumPyClient):
         finally:
             cfg.load_from = original_load_from
 
-        params = self.get_parameters(config)
+        # 计算更新差异
+        local_params = self.get_parameters(config)
+        local_state_dict = self.net.state_dict()
+        update_diff = {key: global_state_dict[key] - local_state_dict[key]
+                       for key in global_state_dict}
+
+        # 生成一致性掩码（简单实现，假设服务器维护历史）
+        # 这里仅返回更新差异和参数，掩码逻辑移到服务器端
+        masked_update = update_diff  # 掩码在服务器端应用
+
+        # 计算欧几里得距离
+        euclidean_distance = 0
+        for key in masked_update:
+            euclidean_distance += torch.norm(masked_update[key]).item()
+
         num_examples = len(self.trainloader)
+        metrics = {"euclidean_distance": euclidean_distance}
+
+        # 将 masked_update 转换为 numpy 数组并返回
+        masked_update_list = [val.cpu().numpy() for val in masked_update.values()]
+
         del self.trainloader
         self.trainloader = None
         gc.collect()
 
-        return params, num_examples, {}
+        return local_params, num_examples, metrics
+
 
 # 客户端工厂函数
 def client_fn(context: Context) -> Client:
     partition_id = context.node_config["partition-id"]
     return FlowerClient(partition_id).to_client()
 
+
 # 创建ClientApp
 client = ClientApp(client_fn=client_fn)
+
 
 # 权重平均用于指标
 def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
@@ -187,7 +191,8 @@ def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
     examples = [num_examples for num_examples, _ in metrics]
     return {"accuracy": sum(accuracies) / sum(examples) if sum(examples) > 0 else 0.0}
 
-# 自定义FedAvg策略
+
+# 自定义FedAvg策略（改为FedAvGHEAL）
 class CustomFedAvg(FedAvg):
     def __init__(self, *args, **kwargs):
         self.model = build_detector(
@@ -196,6 +201,16 @@ class CustomFedAvg(FedAvg):
             test_cfg=cfg.get('test_cfg')
         )
         self.start_round = 1
+
+        # FedAvGHEAL 特定属性
+        self.client_update = {}
+        self.increase_history = {}
+        self.mask_dict = {}
+        self.euclidean_distance = {}
+        self.previous_weights = {}
+        self.previous_delta_weights = {}
+        self.threshold = 0.5  # 可调参数
+        self.beta = 0.1  # 可调参数
 
         if cfg.get('load_from', None):
             try:
@@ -250,6 +265,57 @@ class CustomFedAvg(FedAvg):
             instruction[1].config["server_round"] = server_round
         return client_instructions
 
+    def consistency_mask(self, client_id, update_diff, server_round):
+        updates = update_diff
+        device = next(iter(updates.values())).device
+        if client_id not in self.increase_history or server_round == 1:
+            self.increase_history[client_id] = {key: torch.zeros_like(val, device=device)
+                                                for key, val in updates.items()}
+            for key in updates:
+                self.increase_history[client_id][key] = (updates[key] >= 0).float()
+            return {key: torch.ones_like(val, device=device) for key, val in updates.items()}
+
+        mask = {}
+        for key in updates:
+            positive_consistency = self.increase_history[client_id][key]
+            negative_consistency = 1 - positive_consistency
+            consistency = torch.where(updates[key] >= 0, positive_consistency, negative_consistency)
+            mask[key] = (consistency > self.threshold).float()
+
+        for key in updates:
+            increase = (updates[key] >= 0).float()
+            self.increase_history[client_id][key] = (self.increase_history[client_id][key] * (
+                        server_round - 1) + increase) / server_round
+
+        return mask
+
+    def compute_distance(self, client_id, update_diff):
+        euclidean_distance = 0
+        for key in update_diff:
+            euclidean_distance += torch.norm(update_diff[key]).item()
+        self.euclidean_distance[client_id] = euclidean_distance
+
+    def get_params_diff_weights(self, online_clients):
+        weight_dict = {}
+        total_distance = sum(self.euclidean_distance.values()) or 1e-10  # 防止除零
+        online_num = len(online_clients)
+
+        for client in online_clients:
+            client_distance = self.euclidean_distance.get(client, 0)
+            delta_weight = (1 - self.beta) * self.previous_delta_weights.get(client, 0) + \
+                           self.beta * (client_distance / total_distance)
+            new_weight = self.previous_weights.get(client, 1 / online_num) + delta_weight
+            weight_dict[client] = max(new_weight, 0)  # 确保权重非负
+
+            self.previous_weights[client] = weight_dict[client]
+            self.previous_delta_weights[client] = delta_weight
+
+        total_weight = sum(weight_dict.values()) or 1e-10  # 防止除零
+        for client in online_clients:
+            weight_dict[client] /= total_weight
+
+        return weight_dict
+
     def aggregate_fit(
             self,
             server_round: int,
@@ -257,28 +323,76 @@ class CustomFedAvg(FedAvg):
             failures: List[BaseException],
     ) -> Tuple[Optional[Parameters], Dict[str, Scalar]]:
         print(f"服务器轮次 {server_round}: 聚合 {len(results)} 个结果, {len(failures)} 个失败")
-        aggregated_parameters, metrics = super().aggregate_fit(server_round, results, failures)
-        if aggregated_parameters is not None:
-            try:
-                aggregated_ndarrays = parameters_to_ndarrays(aggregated_parameters)
-                params_dict = zip(self.model.state_dict().keys(),
-                                  [torch.from_numpy(np.copy(p)) for p in aggregated_ndarrays])
-                state_dict = OrderedDict({k: v for k, v in params_dict})
-                self.model.load_state_dict(state_dict, strict=True)
+        if not results or failures:
+            print(f"轮次 {server_round} 无有效结果或存在失败")
+            return None, {}
 
-                actual_round = self.start_round + server_round - 1
-                model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
-                torch.save(self.model.state_dict(), model_path)
-                print(f"保存聚合模型到 {model_path}")
+        # 获取全局模型参数
+        global_state_dict = self.model.state_dict()
+        device = next(iter(global_state_dict.values())).device
 
-                # self.evaluate_aggregated_model()
-            except Exception as e:
-                print(f"聚合或评估模型失败: {e}")
-        else:
-            print(f"轮次 {server_round} 没有聚合参数, 结果: {len(results)}, 失败: {len(failures)}")
+        # 收集客户端更新
+        online_clients = []
+        for client_proxy, fit_res in results:
+            client_id = str(client_proxy)
+            online_clients.append(client_id)
+
+            # 解析客户端参数
+            local_params = parameters_to_ndarrays(fit_res.parameters)
+            local_state_dict = OrderedDict({
+                k: torch.from_numpy(np.copy(v)).to(device)
+                for k, v in zip(global_state_dict.keys(), local_params)
+            })
+
+            # 计算更新差异
+            update_diff = {key: global_state_dict[key] - local_state_dict[key]
+                           for key in global_state_dict}
+            self.client_update[client_id] = update_diff
+
+            # 生成一致性掩码
+            mask = self.consistency_mask(client_id, update_diff, server_round)
+            self.mask_dict[client_id] = mask
+
+            # 应用掩码
+            masked_update = {key: update_diff[key] * mask[key]
+                             for key in update_diff}
+            self.client_update[client_id] = masked_update
+
+            # 计算距离
+            self.compute_distance(client_id, masked_update)
+
+            # 从 metrics 中获取客户端计算的距离（可选验证）
+            client_distance = fit_res.metrics.get("euclidean_distance", 0)
+            print(f"客户端 {client_id} 距离: {client_distance}")
+
+        # 计算聚合权重
+        freq = self.get_params_diff_weights(online_clients)
+
+        # 聚合参数
+        global_params_new = {key: torch.zeros_like(val, device=device)
+                             for key, val in global_state_dict.items()}
+        for client_id in online_clients:
+            weight = freq[client_id]
+            for key in global_params_new:
+                global_params_new[key] += self.client_update[client_id][key] * weight
+
+        # 更新全局模型
+        for key in global_state_dict:
+            global_state_dict[key] -= global_params_new[key]
+        self.model.load_state_dict(global_state_dict, strict=True)
+
+        # 保存聚合模型
+        actual_round = self.start_round + server_round - 1
+        model_path = os.path.join(cfg.work_dir, f"aggregated_model_round_{actual_round}.pth")
+        torch.save(self.model.state_dict(), model_path)
+        print(f"保存聚合模型到 {model_path}")
+
+        # 转换为 Flower 参数格式
+        aggregated_parameters = ndarrays_to_parameters([val.cpu().numpy()
+                                                        for val in global_state_dict.values()])
 
         gc.collect()
-        return aggregated_parameters, metrics
+        return aggregated_parameters, {}
 
     def evaluate_aggregated_model(self):
         print("开始评估聚合模型...")
@@ -290,8 +404,8 @@ class CustomFedAvg(FedAvg):
             preds = []
             gts = []
             for i, output in enumerate(outputs):
-                pred = torch.argmax(torch.tensor(output)).item()  # 需确认模型输出格式
-                gt = self.val_dataset[i]['ann_info']['labels'][0]  # 修正为单值
+                pred = torch.argmax(torch.tensor(output)).item()
+                gt = self.val_dataset[i]['ann_info']['labels'][0]
                 preds.append(pred)
                 gts.append(gt)
 
@@ -300,6 +414,7 @@ class CustomFedAvg(FedAvg):
         except Exception as e:
             print(f"评估聚合模型失败: {e}")
             raise
+
 
 # 服务器工厂函数
 def server_fn(context: Context) -> ServerAppComponents:
@@ -317,6 +432,7 @@ def server_fn(context: Context) -> ServerAppComponents:
         num_rounds -= (start_round - 1)
     config = ServerConfig(num_rounds=num_rounds)
     return ServerAppComponents(strategy=strategy, config=config)
+
 
 # 客户端资源
 backend_config = {"client_resources": {"num_cpus": 1.0, "num_gpus": 0.0}}
