@@ -47,7 +47,7 @@ def main():
     # 路径配置
     config_path       = os.path.join(PROJECT_ROOT, 'configs', 'symformer',
                                      'symformer_retinanet_p2t_cls_fpn_1x_TBX11K_test_shenzhen_val.py')
-    pth_dir           = os.path.join(PROJECT_ROOT, 'work_dirs', 'symformer_retinanet_p2t_cls_flower')
+    pth_dir           = os.path.join(PROJECT_ROOT, 'work_dirs', 'symformer_retinanet_p2t_cls_flower_heal')
     result_dir        = os.path.join(pth_dir, 'result')
     annotation_folder = os.path.join(PROJECT_ROOT, 'data', 'test', 'annotations')
 
