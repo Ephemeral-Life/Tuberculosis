@@ -23,6 +23,7 @@ from flwr.common import parameters_to_ndarrays, ndarrays_to_parameters
 from mmcv.parallel import MMDataParallel
 from coco_classification import CocoClassificationDataset
 import gc
+import types  # Added for FedProx to bind custom train_step
 
 import warnings
 warnings.filterwarnings("ignore")
@@ -32,6 +33,7 @@ logging.basicConfig(level=logging.WARNING)
 # 加载配置
 cfg = Config.fromfile('FTAD-TB/configs/symformer/symformer_retinanet_p2t_cls_fpn_1x_TBX11K.py')
 cfg.gpu_ids = [0]
+cfg.mu = 0.1  # Added for FedProx, defining the proximal term strength
 num_clients = cfg.num_clients
 
 # 注册数据集
@@ -51,32 +53,6 @@ random.shuffle(image_ids)
 partition_size = len(image_ids) // num_clients
 partitions = [image_ids[i * partition_size:(i + 1) * partition_size] for i in range(num_clients)]
 
-# # 临时目录用于客户端注解
-# temp_dir = 'temp_client_ann'
-# os.makedirs(temp_dir, exist_ok=True)
-#
-# # 预计算客户端注解文件（在循环外加载COCO annotation）
-# client_ann_files = []
-# coco = COCO(cfg.data.train.ann_file)  # 只加载一次COCO annotation文件
-# for partition_id in range(num_clients):
-#     client_image_ids = partitions[partition_id]
-#     client_imgs = [img for img in coco.imgs.values() if img['id'] in client_image_ids]
-#     client_ann_ids = coco.getAnnIds(imgIds=client_image_ids)
-#     client_anns = [coco.anns[ann_id] for ann_id in client_ann_ids]
-#     client_coco = {
-#         'images': client_imgs,
-#         'annotations': client_anns,
-#         'categories': coco.dataset['categories'],
-#         'info': coco.dataset.get('info', {}),
-#         'licenses': coco.dataset.get('licenses', [])
-#     }
-#     temp_ann_file = os.path.join(temp_dir, f'client_{partition_id}_ann.json')
-#     with open(temp_ann_file, 'w') as f:
-#         json.dump(client_coco, f)
-#     client_ann_files.append(temp_ann_file)
-# del coco  # 释放COCO对象
-# gc.collect()
-
 # 预生成的客户端注解文件路径
 client_ann_files = [os.path.join('client_ann', f'client_{partition_id}_ann.json')
                     for partition_id in range(num_clients)]
@@ -92,6 +68,7 @@ class FlowerClient(NumPyClient):
         )
         self.ann_file = client_ann_files[partition_id]
         self.trainloader = None
+        self.global_state_dict = None  # Added to store global parameters for FedProx
         print(f"客户端 {self.partition_id} 初始化，注解文件: {self.ann_file}")
 
     def freeze_parameters(self):
@@ -129,6 +106,7 @@ class FlowerClient(NumPyClient):
         new_state_dict = OrderedDict({k: torch.tensor(v) for k, v in params_dict})
         try:
             self.net.load_state_dict(new_state_dict, strict=True)
+            self.global_state_dict = {k: v.clone().detach() for k, v in new_state_dict.items()}  # Store global parameters
             print(f"客户端 {self.partition_id} 参数设置完成")
         except Exception as e:
             print(f"客户端 {self.partition_id} 参数设置失败: {e}")
@@ -148,6 +126,25 @@ class FlowerClient(NumPyClient):
         original_load_from = cfg.get('load_from', None)
         cfg.load_from = None
 
+        # FedProx modification: Add proximal term by overriding train_step
+        self.net.global_state_dict = self.global_state_dict
+        original_train_step = self.net.train_step
+
+        def custom_train_step(self, data, optimizer, **kwargs):
+            losses = original_train_step(data, optimizer)
+            prox_loss = 0.0
+            for name, param in self.named_parameters():
+                if name in self.global_state_dict:
+                    global_param = self.global_state_dict[name].to(param.device)
+                    prox_loss += torch.sum((param - global_param) ** 2)
+            prox_loss = (cfg.mu / 2) * prox_loss  # Use cfg.mu for proximal term
+            total_loss = losses['loss'] + prox_loss  # 假设 losses['loss'] 是原始总损失
+            losses['loss'] = total_loss  # 更新总损失
+            losses['prox_loss'] = prox_loss  # 可选：记录近端损失以供分析
+            return losses
+
+        self.net.train_step = types.MethodType(custom_train_step, self.net)
+
         try:
             train_detector(
                 self.net,
@@ -164,6 +161,7 @@ class FlowerClient(NumPyClient):
             raise
         finally:
             cfg.load_from = original_load_from
+            self.net.train_step = original_train_step  # Restore original train_step
 
         params = self.get_parameters(config)
         num_examples = len(self.trainloader)

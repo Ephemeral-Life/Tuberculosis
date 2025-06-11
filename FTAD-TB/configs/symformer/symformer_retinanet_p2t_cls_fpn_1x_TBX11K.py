@@ -1,7 +1,7 @@
 seed = 42
-work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower'
+work_dir = 'work_dirs/symformer_retinanet_p2t_cls_flower_FedProx'
 num_clients = 3
-num_rounds = 100
+num_rounds = 30
 max_epochs = 5
 log_level = 'WARNING'
 model = dict(
